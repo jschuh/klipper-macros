@@ -97,6 +97,12 @@ filename: ~/klipper_config/variables.cfg
 [virtual_sdcard]
 path: ~/gcode_files
 
+# Uncomment the sections below if Fluidd complains (because it's confused).
+#[display_status]
+#
+#[gcode_macro CANCEL_PRINT]
+#rename_existing: CANCEL_PRINT_BASE
+#gcode: CANCEL_PRINT_BASE{% for k in params %}{' '~k~'='~params[k]}{% endfor %}
 ```
 
 ## Slicer Configuration
