@@ -297,6 +297,16 @@ adjustments made in clients like Mainsail and Fluidd will not be scaled
 [custom LCD menus]](#lcd-menus) will also replace the temperature controls with
 non-scaling versions. If you use the stock menus you'll get scaled values.*
 
+### Kinematics
+
+#### `G28`
+
+Extends the `G28` command to add lazy homing by not re-homing already homed axes
+when the `O` argument is included. See Klipper `G28` documentation for general
+information and detail on the other arguments.
+
+* `O` - Omits axes from the homing procedure if they are already homed.
+
 ### Layer Triggers
 
 Provides the capability to run user-specified g-code commands at arbitrary layer
