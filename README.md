@@ -159,7 +159,7 @@ Lists all available surfaces.
 
 Sets the provided surface active and adjust the current Z offset to match the
 offset for the surface. If no `SURFACE` argument is provided the available
-surfaces are listed, with active surface preceded by a `*+*`.
+surfaces are listed, with active surface preceded by a `*`.
 
 * `SURFACE` - Bed surface with an associated offset.
 
@@ -169,11 +169,12 @@ surfaces are listed, with active surface preceded by a `*+*`.
 
 #### `SET_SURFACE_OFFSET`
 
+Directly sets the the Z offset of `SURFACE` to the value of `OFFSET`. If no
+argument for `SURFACE` is provided the current active surface is used. If no
+argument for `OFFSET` is provided the current offset is displayed.
+
 * `OFFSET` - New Z offset for the given surface.
 * `SURFACE` *(default: current surface)* - Bed surface.
-
-* Directly sets the the Z offset of `SURFACE` to the value of `OFFSET`. If no
-  argument for `SURFACE` is provided the current active surface is used.
 
 ***Bed Surface Note:** The `SET_GCODE_OFFSET` macro is overridden to update the
 offset for the active surface. This makes the bed surface work with adjustments
