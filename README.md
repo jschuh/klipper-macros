@@ -126,7 +126,7 @@ PRINT_END
 ```
 ;BEFORE_LAYER_CHANGE
 ;[layer_z]
-BEFORE_LAYER_CHANGE HEIGHT=[max_layer_z] LAYER=[layer_num]
+BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
 ```
 
 **After layer change G-code**
@@ -373,6 +373,9 @@ Parks the toolhead.
 * `Y` *(default: `variable_park_y`)* - Absolute Y parking coordinate.
 * `Z` *(default: `variable_park_z`)* - Z parking coordinate applied according
   to the `P` parameter.
+* Note: If a print is in progress the larger of the tallest printed layer or the
+  current Z position will be used as the current Z position, to avoid collisions
+  with already printed objects during a sequential print.
 
 #### Marlin Compatibility
 
