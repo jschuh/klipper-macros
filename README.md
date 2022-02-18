@@ -1,9 +1,10 @@
 # klipper-macros
 
 This is a collection of macros for the
-[Klipper 3D printer firmware](https://github.com/Klipper3d/klipper) that I
-originally created a repo for to create a consistent set of macros between my
-3D printers. Since I've found them useful, I thought other people might as well.
+[Klipper 3D printer firmware](https://github.com/Klipper3d/klipper). I
+originally created this repo just to have a consistent set of macros shared
+between my own 3D printers. But since I've found them useful, I thought other
+people might as well.
 
 ## What can I do with these?
 
@@ -12,34 +13,42 @@ Most of these macros just improve basic functionality (e.g.
 with g-code targeting Marlin printers. However, there are also some nice extras:
 
 * **[Schedule commands at heights and layer changes](#layer-triggers)** -
-  This is similar to what your slicer can already do, but simpler, and you
-  can schedule these commands while printing. One example of this feature is an
-  optional [LCD menu item](#lcd-menus) to pause the print at the next layer
-  change, which reduces the chances of marring the print (due to randomly
-  pausing in an external perimeter).
+  This is similar to what your slicer can already do, but I find it simpler, and
+  you can schedule these commands while a print is active. As an example of
+  usage, I added an [LCD menu item](#lcd-menus) to pause the print at the next
+  layer change. This way the pause won't mar the print by e.g. pausing inside
+  an external perimeter.
 * **Dynamically scale [heaters](#heaters) and [fans](#fans)** - This makes it
-  easy to do things like adjust fan settings during a live print, or maintain
-  simpler slicer profiles by moving things like a heater bump for a hardened
-  steel nozzle into state stored on the printer.
-* Cleaner [LCD menu interface](#lcd-menus) and a much easier way to customize
-  materials in the LCD menu (or at least I think so).
+  easy to do things like persistently adjust fan settings during a live print,
+  or maintain simpler slicer profiles by moving things like a heater bump for a
+  hardened steel nozzle into state stored on the printer.
+* **Cleaner [LCD menu interface](#lcd-menus)** - I've simplified the menus and
+  provided a much easier way to customize materials in the LCD menu (or at least
+  I think so). I've also added confirmation dialogs for commands that would
+  abort an active print.
 * **[Optimized mesh bed leveling](#bed-mesh)** - Probes only within the printed
   area, which can save a lot of time on smaller prints.
 
 ## A few warnings...
 
-* You must have `bed_heater` and `extruder` sections configured, otherwise some
-  of the macros fail. The Klipper macro system makes it impossible to handle
+* You must have `bed_heater` and `extruder` sections configured, otherwise the
+  macros won't even load. The Klipper macro system makes it impossible to handle
   this without adding more end-user configuration, so I decided not to bother.
 * The multi-extruder and chamber heater functionality is very under-tested and
-  may have bugs, since I haven't used it much at all. Patches are welcome.
-* There's probably other stuff I haven't used enough to really test it, so use
-  at your own discretion.
+  may have bugs, since I haven't used it much at all. Patches welcome.
+* There's probably other stuff I haven't used enough to thoroughly, so use
+  at your own risk.
 
 # Installation
 
-To install the macros just clone this repository inside of your `klipper_config`
-directory and paste the below section into your `printer.cfg` to get started.
+To install the macros first clone this repository inside of your
+`klipper_config` directory like so.
+
+```
+git clone https://github.com/jschuh/klipper-macros.git
+```
+
+Then paste the below section into your `printer.cfg` to get started.
 The settings are all listed in [globals.cfg](globals.cfg#L5), and can be
 overridden by creating a corresponding variable with a new value in your
 `[gcode_macro _km_options]` section.
@@ -51,7 +60,7 @@ overridden by creating a corresponding variable with a new value in your
 # there into the section below, and change the value to meet your needs.
 
 [gcode_macro _km_options]
-# These are examples of some common customizations:
+# These are examples of some likely customizations:
 # Any sheets in the below list will be available with a configurable offset.
 #variable_bed_surfaces: ['smooth_1','texture_1']
 # Length (in mm) of filament to load (bowden tubes will be longer).
@@ -130,9 +139,9 @@ AFTER_LAYER_CHANGE
 
 # Command Reference
 
-## Core Features
+## Customization
 
-Core features are configured by setting `variable_` values in the 
+All features are configured by setting `variable_` values in the 
 `[gcode_macro _km_options]` section. All available variables and their purpose
 are listed in [globals.cfg](globals.cfg#L5).
 
@@ -282,9 +291,11 @@ same and the function is identical, except that scaling values are applied.
   implement the heater scaling described above.
 
 ***Heater Scaling Note:** Both `SET_HEATER_TEMPERATURE` and `TEMPERATURE_WAIT`
-are not overriden and will not. This means that heater scaling adjustements made
-in clients like Mainsail and Fluidd will not be scaled (because the alternative
-approach seemed to confusing).
+are **not** overriden and will not scale values. This means that heater scaling
+adjustments made in clients like Mainsail and Fluidd will not be scaled
+(because that seemed like the clearest behavior). The
+[custom LCD menus]](#lcd-menus) will also replace the temperature controls with
+non-scaling versions. If you use the stock menus you'll get scaled values.*
 
 ### Layer Triggers
 
@@ -301,13 +312,13 @@ height.
 * `LAYER` - Layer number (zero indexed) to run the command. Exactly one of
   `HEIGHT` or `LAYER` must be specified. The special value `next` may be
   specified run the command at the next layer change.
-* `COMMAND` - The command to run at layer change. Take care in proper quoting
-  of spaces and escaping of special characters.
-* `BEFORE` *(default: `0`)* - Set to run the command before the layer
+* `COMMAND` - The command to run at layer change. Take care to properly quote
+  spaces and escape any special characters.
+* `BEFORE` *(default: `0`)* - Set to 1 run the command before the layer
   change (i.e. immediately following completion of the previous layer). By
   default commands run after the layer change (i.e. immediately preceding the
-  next layer). In most cases this distinction doesn't matter, but it can when
-  dealing with toolchangers or other multi-material printing.
+  next layer). In most cases this distinction here doesn't matter, but it can
+  be important when dealing with toolchangers or other multi-material printing.
 
 #### `RESET_LAYER_GCODE`
 
@@ -331,7 +342,7 @@ Clears all gcode triggers and associated state. Called in the PRINT_END macro.
 ***Layer Triggers Note:** If any triggers cause an exception the current print
 will abort. The convenience macros above validate their arguments as much as is
 possible to reduce the chances of an aborted print, but they cannot entirely
-eliminate the rosk of a macro calling `action_raise_error()` duriung an active print.
+eliminate the risk of a macro doig something that aborts the print.
 
 ### Park
 
@@ -450,7 +461,27 @@ The following additional configuration options are available from
 
 ### LCD Menus
 
-Adds relevant menu items to an LCD display.
+Adds relevant menu items to an LCD display and improves some existing
+functionality. See the [customization](#customization) section above for more
+information on how to configure specific behaviors.
+
+* Confirmation added for cancelling the print or disabling steppers during a
+  print.
+* Several temperature menu changes:
+  * Up to 10 filaments and their corresponding temperatures can be set via
+   `variable_menu_temperature`.
+  * Per filament chamber temperature controls are available if a 
+    `[heater_generic chamber]` section is configured.
+  * The cooldown commands are moved to the top level temperature menu.
+* The filament loading commands are replaced with macros that use the lengths
+  and speeds specified in `variable_load_length` and `variable_load_speed`,
+  which includes a priming phase at the end of the load (controlled via
+  `variable_load_priming_length` and `variable_load_priming_speed`).
+* Setup and tuning menus are present for managing [bed surfaces.](#bed-surface)
+* The SD card menu has been streamlined for printing and non-printing modes.
+* You can hide the Octoprint or SD card menus if you don't use them 
+  (via `variable_menu_show_octoprint` and `variable_menu_show_sdcard`,
+  respectively).
 
 ***Configuration:** `[include klipper-macros/optional/lcd_menus.cfg]`*
 
