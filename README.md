@@ -112,7 +112,7 @@ path: ~/gcode_files
 Open "Printer Settings" → "Custom G-code" for your Klipper printer and
 paste the below text into the relevant sections.
 
-**Start G-code**
+#### Start G-code
 
 ```
 M190 S0
@@ -121,13 +121,13 @@ PRINT_START EXTRUDER={first_layer_temperature[initial_tool]} BED={first_layer_be
 ; Any purge, intro lines, etc. go after this...
 ```
 
-**End G-code**
+#### End G-code
 
 ```
 PRINT_END
 ```
 
-**Before layer change G-code**
+#### Before layer change G-code
 
 ```
 ;BEFORE_LAYER_CHANGE
@@ -135,7 +135,7 @@ PRINT_END
 BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
 ```
 
-**After layer change G-code**
+#### After layer change G-code
 
 ```
 ;AFTER_LAYER_CHANGE
@@ -163,15 +163,12 @@ Lists all available surfaces.
 
 #### `SET_SURFACE_ACTIVE`
 
-Sets the provided surface active and adjust the current Z offset to match the
+Sets the provided surface active (from one listed in listed in
+`variable_bed_surfaces`) and adjusts the current Z offset to match the
 offset for the surface. If no `SURFACE` argument is provided the available
 surfaces are listed, with active surface preceded by a `*`.
 
 * `SURFACE` - Bed surface with an associated offset.
-
-* Sets the supplied surface active (from one listed in listed in
-  `variable_bed_surfaces`). Any changes to the Z offset will be applied to and
-  saved for the active surface.
 
 #### `SET_SURFACE_OFFSET`
 
