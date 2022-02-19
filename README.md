@@ -107,7 +107,7 @@ path: ~/gcode_files
 
 ## Slicer Configuration
 
-### Prusa Slicer
+### PrusaSlicer / SuperSlicer
 
 Open "Printer Settings" → "Custom G-code" for your Klipper printer and
 paste the below text into the relevant sections.
@@ -156,8 +156,10 @@ are listed in [globals.cfg](globals.cfg#L5).
 Provides a set of macros for selecting different bed surfaces with
 correspdonding Z offset adjustments to compensate for their thickness. All
 available surfaces must be listed in the `variable_bed_surfaces` array.
-Corresponding LCD menus will also be added to *Setup* and *Tune* if
-[`lcd_menus.cfg`](#lcd-menus) is included.
+Corresponding LCD menus for sheet selection and babystepping will be added to
+*Setup* and *Tune* if [`lcd_menus.cfg`](#lcd-menus) is included. Any Z offset
+adjustments made in the LCD menus, console, or other clients (e.g. Mainsail,
+Fluidd) will be applied to the current sheet and persisted across restarts.
 
 Lists all available surfaces. 
 
@@ -180,8 +182,8 @@ argument for `OFFSET` is provided the current offset is displayed.
 * `SURFACE` *(default: current surface)* - Bed surface.
 
 ***Bed Surface Note:** The `SET_GCODE_OFFSET` macro is overridden to update the
-offset for the active surface. This makes the bed surface work with adjustments
-made in clients like Mainsail and Fluidd.*
+offset for the active surface. This makes the bed surface work with Z offset
+adjustments made via any interface or client.*
 
 ### Beep
 
