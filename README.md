@@ -221,14 +221,16 @@ Sets scaling parameters for the extruder fan.
 
 ### Filament
 
-#### `LOAD_FILAMENT` and `UNLOAD_FILAMENT`
+#### `LOAD_FILAMENT` / `UNLOAD_FILAMENT`
 
 Loads or unloads filament to the nozzle.
 
+* `LENGTH` *(default: `variable_load_length`)* - The length of filament to load
+  or unload.
+* `SPEED` *(default: `variable_load_speed`)* - Speed (in mm/m) to feed the
+  filament.
 * `TARGET` *(optional)* - If specified first preheats the extruder to the
   specified temperature.
-* `LENGTH` *(default: `variable_load_length`)* - The length of filament to load or
-  unload.
 
 #### Marlin Compatibility
 
