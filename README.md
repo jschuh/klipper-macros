@@ -231,12 +231,13 @@ Loads or unloads filament to the nozzle.
   or unload.
 * `SPEED` *(default: `variable_load_speed`)* - Speed (in mm/m) to feed the
   filament.
-* `TARGET` *(optional: `min_extrude_temp`)* - Ensures the extruder is heated
+* `MINIMUM` *(default: `min_extrude_temp` + 5)* - Ensures the extruder is heated
    to at least the specified temperature.
 
 #### Marlin Compatibility
 
-* The `M701` and `M702` commands are implemented.
+* The `M701` and `M702` commands are implemented with a default filament length
+  of `variable_load_length`.
 
 ### Heaters
 
@@ -381,6 +382,8 @@ Parks the toolhead.
 * `Y` *(default: `variable_park_y`)* - Absolute Y parking coordinate.
 * `Z` *(default: `variable_park_z`)* - Z parking coordinate applied according
   to the `P` parameter.
+* `LAZY` *(default: 1)* - Will home any unhomed axes if needed and will not
+  move any axis if already homed and parked (even if `P=2`).
 * Note: If a print is in progress the larger of the tallest printed layer or the
   current Z position will be used as the current Z position, to avoid collisions
   with already printed objects during a sequential print.
