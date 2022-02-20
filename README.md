@@ -231,8 +231,8 @@ Loads or unloads filament to the nozzle.
   or unload.
 * `SPEED` *(default: `variable_load_speed`)* - Speed (in mm/m) to feed the
   filament.
-* `TARGET` *(optional)* - If specified first preheats the extruder to the
-  specified temperature.
+* `TARGET` *(optional: `min_extrude_temp`)* - Ensures the extruder is heated
+   to at least the specified temperature.
 
 #### Marlin Compatibility
 
