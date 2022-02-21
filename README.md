@@ -501,8 +501,10 @@ information on how to configure specific behaviors.
   and speeds specified in `variable_load_length` and `variable_load_speed`,
   which includes a priming phase at the end of the load (controlled via
   `variable_load_priming_length` and `variable_load_priming_speed`).
-* Setup and tuning menus are present for managing [bed surfaces.](#bed-surface)
+* [Bed surface](#bed-surface) management is integrated into the setup and tuning
+  menus.
 * The SD card menu has been streamlined for printing and non-printing modes.
+* The setup menu includes host shutdown, host restart, speed, and flow controls.
 * You can hide the Octoprint or SD card menus if you don't use them 
   (via `variable_menu_show_octoprint` and `variable_menu_show_sdcard`,
   respectively).
