@@ -359,6 +359,12 @@ Clears all gcode triggers and associated state. Called in the PRINT_END macro.
 * `PAUSE_AT_LAYER  { HEIGHT=<pos> | LAYER=<layer> } ...`
   * Schedules the current print to pause at the specified layer change.
     See [`PAUSE`](#pause) for additional arguments.
+* `SPEED_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } SPEED=<percentage>`
+  * Schedules a feedrate adjustment at the specified layer change. (`SPEED`
+    parameter behaves the same as the `M220` `S` parameter.)
+* `FLOW_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } FLOW=<percentage>`
+  * Schedules a flow-rate adjustment at the specified layer change. (`FLOW`
+    parameter behaves the same as the `M221` `S` parameter.)
 * `FAN_AT_LAYER { HEIGHT=<pos> | LAYER=<layer> } ...`
   * Schedules a fan adjustment at the specified layer change. See 
     [`SET_FAN_SCALING`](#set_fan_scaling) for additional arguments.
