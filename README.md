@@ -53,6 +53,11 @@ The settings are all listed in [globals.cfg](globals.cfg#L5), and can be
 overridden by creating a corresponding variable with a new value in your
 `[gcode_macro _km_options]` section.
 
+> **Note:** If you have a `[homing_override]` section you will need to update any
+> `G28` commands in that section to use to `G28.6245197` instead (which is the
+> renamed version of Klipper's built-in `G28`). Failure to do this will cause
+> `G28` commands to error out with the message *"Macro G28 called recursively"*.
+
 # Klipper Setup
 
 ```
@@ -181,9 +186,9 @@ argument for `OFFSET` is provided the current offset is displayed.
 * `OFFSET` - New Z offset for the given surface.
 * `SURFACE` *(default: current surface)* - Bed surface.
 
-***Bed Surface Note:** The `SET_GCODE_OFFSET` macro is overridden to update the
-offset for the active surface. This makes the bed surface work with Z offset
-adjustments made via any interface or client.*
+> **Note:** The `SET_GCODE_OFFSET` macro is overridden to update the
+> offset for the active surface. This makes the bed surface work with Z offset
+> adjustments made via any interface or client.
 
 ### Beep
 
@@ -264,16 +269,18 @@ any currently scaled heaters and thier scaling parameters will be listed.
 * `TARGET` *(optional)* - This specifies a new target temperature, otherwise any
   new adjustments will be applied to the unadjusted value of the last set target
   temperature.
-* *Note: a zero target temperature will turn the heater off regardless of
-  scaling parameters.*
+
+> **Note:** a zero target temperature will turn the heater off regardless of
+> scaling parameters.
 
 #### `RESET_HEATER_SCALING`
 
 Clears current heater scaling.
 
 * `HEATER` *(optional)* - The name of the heater to reset.
-* *Note: if no HEATER argument is specified scaling parameters will be reset for
-  all heaters.*
+
+> **Note:** if no HEATER argument is specified scaling parameters will be reset
+> for all heaters.
 
 #### `SET_HEATER_TEMPERATURE_SCALED`
 
@@ -299,12 +306,13 @@ same and the function is identical, except that scaling values are applied.
 * The `M109`, `M190`, `M191`, `M104`, `M140`, and `M141` are all overridden to
   implement the heater scaling described above.
 
-***Heater Scaling Note:** Both `SET_HEATER_TEMPERATURE` and `TEMPERATURE_WAIT`
-are **not** overriden and will not scale values. This means that heater scaling
-adjustments made in clients like Mainsail and Fluidd will not be scaled
-(because that seemed like the clearest behavior). The
-[custom LCD menus]](#lcd-menus) will also replace the temperature controls with
-non-scaling versions. If you use the stock menus you'll get scaled values.*
+> **Note:** Both `SET_HEATER_TEMPERATURE` and `TEMPERATURE_WAIT` are **not**
+> overriden and will not scale values. This means that heater scaling
+> adjustments made in clients like Mainsail and Fluidd will not be scaled
+> (because that seemed like the clearest behavior). The
+> [custom LCD menus]](#lcd-menus) will also replace the temperature controls
+> with non-scaling versions. If you use the stock menus you'll get scaled
+> values.
 
 ### Kinematics
 
@@ -358,10 +366,10 @@ Clears all gcode triggers and associated state. Called in the PRINT_END macro.
   * Schedules a heater adjustment at the specified layer change. See 
     [`SET_HEATER_SCALING`](#set_heater_scaling) for additional arguments.
 
-***Layer Triggers Note:** If any triggers cause an exception the current print
-will abort. The convenience macros above validate their arguments as much as is
-possible to reduce the chances of an aborted print, but they cannot entirely
-eliminate the risk of a macro doig something that aborts the print.
+> **Note:** If any triggers cause an exception the current print will
+> abort. The convenience macros above validate their arguments as much as is
+> possible to reduce the chances of an aborted print, but they cannot entirely
+> eliminate the risk of a macro doig something that aborts the print.
 
 ### Park
 
@@ -384,9 +392,10 @@ Parks the toolhead.
   to the `P` parameter.
 * `LAZY` *(default: 1)* - Will home any unhomed axes if needed and will not
   move any axis if already homed and parked (even if `P=2`).
-* Note: If a print is in progress the larger of the tallest printed layer or the
-  current Z position will be used as the current Z position, to avoid collisions
-  with already printed objects during a sequential print.
+
+> **Note:** If a print is in progress the larger of the tallest printed layer or
+> the current Z position will be used as the current Z position, to avoid
+> collisions with already printed objects during a sequential print.
 
 #### Marlin Compatibility
 
