@@ -117,7 +117,7 @@ paste the below text into the relevant sections.
 ```
 M190 S0
 M109 S0
-PRINT_START EXTRUDER={first_layer_temperature[initial_tool]} BED={first_layer_bed_temperature} MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count}
+PRINT_START EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count}
 ; Any purge, intro lines, etc. go after this...
 ```
 
