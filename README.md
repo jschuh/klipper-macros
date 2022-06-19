@@ -31,7 +31,7 @@ with g-code targeting Marlin printers. However, there are also some nice extras:
 
 ## A few warnings...
 
-* You must have `bed_heater` and `extruder` sections configured, otherwise the
+* You must have `heater_bed` and `extruder` sections configured, otherwise the
   macros won't even load. The Klipper macro system makes it impossible to handle
   this without adding more end-user configuration, so I decided not to bother.
 * The multi-extruder and chamber heater functionality is very under-tested and
@@ -310,7 +310,7 @@ same and the function is identical, except that scaling values are applied.
 > overriden and will not scale values. This means that heater scaling
 > adjustments made in clients like Mainsail and Fluidd will not be scaled
 > (because that seemed like the clearest behavior). The
-> [custom LCD menus]](#lcd-menus) will also replace the temperature controls
+> [custom LCD menus](#lcd-menus) will also replace the temperature controls
 > with non-scaling versions. If you use the stock menus you'll get scaled
 > values.
 
@@ -319,8 +319,9 @@ same and the function is identical, except that scaling values are applied.
 #### `G28`
 
 Extends the `G28` command to add lazy homing by not re-homing already homed axes
-when the `O` argument is included. See Klipper `G28` documentation for general
-information and detail on the other arguments.
+when the `O` argument is included (equivalent to the same argument in Marlin).
+See Klipper `G28` documentation for general information and detail on the other
+arguments.
 
 * `O` - Omits axes from the homing procedure if they are already homed.
 
@@ -346,10 +347,6 @@ height.
   default commands run after the layer change (i.e. immediately preceding the
   next layer). In most cases this distinction here doesn't matter, but it can
   be important when dealing with toolchangers or other multi-material printing.
-
-#### `RESET_LAYER_GCODE`
-
-Clears all gcode triggers and associated state. Called in the PRINT_END macro.
 
 #### Convenient Layer Change Macros
 
