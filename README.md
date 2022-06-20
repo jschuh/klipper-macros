@@ -333,7 +333,8 @@ changes.
 #### `GCODE_AT_LAYER`
 
 Runs abritrary, user-provided g-code commands at the user-specified layer or
-height.
+height. If no arguments are specified it will display all currently scheduled
+g-code commands along with their associated layer or height.
 
 * `HEIGHT` - Z height (in mm) to run the command. Exactly one of `HEIGHT` or
   `LAYER` must be specified.
@@ -347,6 +348,10 @@ height.
   default commands run after the layer change (i.e. immediately preceding the
   next layer). In most cases this distinction here doesn't matter, but it can
   be important when dealing with toolchangers or other multi-material printing.
+
+#### `CANCEL_ALL_LAYER_GCODE`
+
+Cancels all g-code commands previously scheduled at any layer or height.
 
 #### Convenient Layer Change Macros
 
