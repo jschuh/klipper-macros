@@ -110,6 +110,20 @@ path: ~/gcode_files
 #gcode: CANCEL_PRINT_BASE{% for k in params %}{' '~k~'='~params[k]}{% endfor %}
 ```
 
+## Moonraker Configuration
+
+Paste the following into your `moonraker.conf` if you want the macros to
+automatically update directly from this repo.
+
+```
+[update_manager klipper-macros]
+type: git_repo
+origin: https://github.com/jschuh/klipper-macros.git
+path: ~/klipper_config/klipper-macros
+primary_branch: main
+is_system_service: False
+```
+
 ## Slicer Configuration
 
 ### PrusaSlicer / SuperSlicer
