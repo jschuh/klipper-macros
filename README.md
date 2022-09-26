@@ -128,8 +128,9 @@ is_system_service: False
 
 ### PrusaSlicer / SuperSlicer
 
-Open "Printer Settings" → "Custom G-code" for your Klipper printer and
-paste the below text into the relevant sections.
+PrusaSlicer and its variants are fairly easy to configure. Just open **Printer
+Settings → Custom G-code** for your Klipper printer and paste the below text
+into the relevant sections.
 
 #### Start G-code
 
@@ -161,6 +162,79 @@ BEFORE_LAYER_CHANGE HEIGHT=[layer_z] LAYER=[layer_num]
 ;[layer_z]
 AFTER_LAYER_CHANGE
 ```
+
+### Ultimaker Cura
+
+Cura is a bit more difficult to configure, and it comes with the following known
+issues:
+
+- Cura doesn't have proper placeholders for before and after layer changes, so
+  the before triggers all fire and are followed immediately by the after
+  triggers, all of which happens inside the layer change. This probably doesn't
+  matter, but it does mean that you can't use the before and after triggers to
+  avoid running code in the layer change.
+- Cura doesn't provide the Z-height of the current layer, so it's inferred from
+  the current nozzle position, which will include the Z-hop if the nozzle is
+  currently raised. This means height based gcode triggers may fire earlier than
+  expected.
+- Cura's **Insert at layer change** fires the `After` trigger and then the
+  `Before` trigger (i.e before or after the *layer*, versus before or after the
+  *layer change*). These macros and PrusaSlicer do the opposite, which is
+  something to keep in mind if you're used to how Cura does it. Note that these
+  macros do use an  **Insert at layer change** script to force `LAYER` comment
+  generation, but that doesn't affect the trigger ordering.
+- Cura does not provide the first layer bounding rectangle, only the model
+  bounding volume. This means the XY bounding box used to speed up mesh probing
+  may be larger than it needs to be, resulting in bed probing that's not as fast
+  as it could be. 
+
+Accepting the caveats, the macros work quite well with Cura if you follow the
+configuration steps listed below.
+
+#### Start G-code
+
+```
+M190 S0
+M109 S0
+PRINT_START EXTRUDER={material_print_temperature_layer_0} BED={material_bed_temperature_layer_0}
+; Any purge, intro lines, etc. go after this...
+```
+
+#### End G-code
+
+```
+PRINT_END
+```
+
+#### Post Processing Plugin
+
+Use the menu item for **Extensions → Post Processing → Modify G-Code** to
+open the **Post Processing Plugin** and add the following four scripts. *The
+scripts must be run in the order listed below and be sure to copy the strings
+exactly, with no leading or trailing spaces.*
+
+##### Search and Replace
+
+- Search: `\n;(MIN|MAX)(X|Y):([^\n]+)\n;\1(Y|X):([^\n]+)`
+- Replace: `\n;\1\2:\3\n;\1\4:\5\nPRINT_START_SET MESH_\1=\3,\5`
+- Use Regular Expressions: ☑️
+
+##### Search and Replace
+
+- Search: `\n;(LAYER_COUNT):([^\n]+)`
+- Replace: `\n;\1:\2\nINIT_LAYER_GCODE LAYERS=\2\nPRINT_START_SET LAYERS=\2`
+- Use Regular Expressions: ☑️
+
+##### Insert at layer change
+
+- When to insert: `Before`
+- G-code to insert: `;BEFORE_LAYER_CHANGE`
+
+##### Search and Replace
+
+- Search: `\n;(LAYER):([^\n]+)`
+- Replace: `\n;\1:\2\nBEFORE_LAYER_CHANGE LAYER=\2\nAFTER_LAYER_CHANGE`
+- Use Regular Expressions: ☑️
 
 # Command Reference
 
