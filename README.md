@@ -122,6 +122,7 @@ origin: https://github.com/jschuh/klipper-macros.git
 path: ~/klipper_config/klipper-macros
 primary_branch: main
 is_system_service: False
+managed_services: klipper
 ```
 
 ## Slicer Configuration
