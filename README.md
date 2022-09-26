@@ -216,14 +216,14 @@ exactly, with no leading or trailing spaces.*
 
 ##### Search and Replace
 
-- Search: `\n;(MIN|MAX)(X|Y):([^\n]+)\n;\1(Y|X):([^\n]+)`
-- Replace: `\n;\1\2:\3\n;\1\4:\5\nPRINT_START_SET MESH_\1=\3,\5`
+- Search: `(\n;(MIN|MAX)X:([^\n]+)\n;\2Y:([^\n]+))`
+- Replace: `\1\nPRINT_START_SET MESH_\2=\3,\4`
 - Use Regular Expressions: ☑️
 
 ##### Search and Replace
 
-- Search: `\n;(LAYER_COUNT):([^\n]+)`
-- Replace: `\n;\1:\2\nINIT_LAYER_GCODE LAYERS=\2\nPRINT_START_SET LAYERS=\2`
+- Search: `(\n;LAYER_COUNT:([^\n]+))`
+- Replace: `\1\nINIT_LAYER_GCODE LAYERS=\2\nPRINT_START_SET LAYERS=\2`
 - Use Regular Expressions: ☑️
 
 ##### Insert at layer change
@@ -233,8 +233,8 @@ exactly, with no leading or trailing spaces.*
 
 ##### Search and Replace
 
-- Search: `\n;(LAYER):([^\n]+)`
-- Replace: `\n;\1:\2\nBEFORE_LAYER_CHANGE LAYER=\2\nAFTER_LAYER_CHANGE`
+- Search: `(\n;LAYER:([^\n]+))`
+- Replace: `\1\nBEFORE_LAYER_CHANGE LAYER=\2\nAFTER_LAYER_CHANGE`
 - Use Regular Expressions: ☑️
 
 # Command Reference
