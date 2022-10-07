@@ -26,7 +26,7 @@ with g-code targeting Marlin printers. However, there are also some nice extras:
   provided a much easier way to customize materials in the LCD menu (or at least
   I think so). I've also added confirmation dialogs for commands that would
   abort an active print.
-* **[Optimized mesh bed leveling](#bed-mesh-fast)** - Probes only within the
+* **[Optimized mesh bed leveling](#bed-mesh-improvements)** - Probes only within the
   printed area, which can save a lot of time on smaller prints.
 
 ## A few warnings...
@@ -245,7 +245,7 @@ All features are configured by setting `variable_` values in the
 `[gcode_macro _km_options]` section. All available variables and their purpose
 are listed in [globals.cfg](globals.cfg#L5).
 
-### Bed Mesh Fast
+### Bed Mesh Improvements
 
 `BED_MESH_CALIBRATE_FAST`
 
