@@ -26,8 +26,8 @@ with g-code targeting Marlin printers. However, there are also some nice extras:
   provided a much easier way to customize materials in the LCD menu (or at least
   I think so). I've also added confirmation dialogs for commands that would
   abort an active print.
-* **[Optimized mesh bed leveling](#bed-mesh)** - Probes only within the printed
-  area, which can save a lot of time on smaller prints.
+* **[Optimized mesh bed leveling](#bed-mesh-fast)** - Probes only within the
+  printed area, which can save a lot of time on smaller prints.
 
 ## A few warnings...
 
@@ -244,6 +244,27 @@ exactly, with no leading or trailing spaces.*
 All features are configured by setting `variable_` values in the 
 `[gcode_macro _km_options]` section. All available variables and their purpose
 are listed in [globals.cfg](globals.cfg#L5).
+
+### Bed Mesh Fast
+
+`BED_MESH_CALIBRATE_FAST`
+
+Wraps the Klipper `BED_MESH_CALIBRATE` command to scale and redistribute the
+probe points so that only the appropriate area in `MESH_MIN` and `MESH_MAX` is probed. This can dramatically reduce probing times for anything that doesn't
+fill the first layer of the bed. `PRINT_START` will automatically use this for
+bed mesh calibration if a `[bed_mesh]` section is detected in your config.
+
+The following additional configuration options are available from
+[globals.cfg](globals.cfg#L5).
+
+* `variable_probe_mesh_padding` - Extra padding around the rectangle defined by
+  `MESH_MIN` and `MESH_MAX`.
+* `variable_probe_min_count` - Minimum number of probes for partial probing of a
+  bed mesh.
+* `variable_probe_count_scale` - Scaling factor to increase probe count for
+   partial bed probes.
+
+> **Note:** See the [optional section](#bed-mesh) for additional macros.
 
 ### Bed Surface
 
@@ -568,24 +589,16 @@ related commands, such as accelleration, jerk, and linear advance.
 
 ### Bed Mesh
 
-`BED_MESH_CALIBRATE`
+`BED_MESH_CALIBRATE` and `G20`
 
-Wraps the equivalent Klipper command to scale and redistribute the probe points
-so that only the appropriate area in `MESH_MIN` and `MESH_MAX` is probed. This
-can dramatically reduce probing times for anything that doesn't fill the first
-layer of the bed.
+Overrides the default `BED_MESH_CALIBRATE` to use `BED_MESH_CALIBRATE_FAST`
+instead, and adds the `G20` command.
 
-The following additional configuration options are available from
-[globals.cfg](globals.cfg#L5).
+***Configuration:***
 
-* `variable_probe_mesh_padding` - Extra padding around the rectangle defined by
-  `MESH_MIN` and `MESH_MAX`.
-* `variable_probe_min_count` - Minimum number of probes for partial probing of a
-  bed mesh.
-* `variable_probe_count_scale` - Scaling factor to increase probe count for
-   partial bed probes.
-
-***Configuration:** `[include klipper-macros/optional/bed_mesh.cfg]`*
+```
+[include klipper-macros/optional/bed_mesh.cfg]
+```
 
 ***Requirements:** A properly configured `bed_mesh` section.*
 
@@ -615,6 +628,10 @@ information on how to configure specific behaviors.
   (via `variable_menu_show_octoprint` and `variable_menu_show_sdcard`,
   respectively).
 
-***Configuration:** `[include klipper-macros/optional/lcd_menus.cfg]`*
+***Configuration:***
+
+```
+[include klipper-macros/optional/lcd_menus.cfg]
+```
 
 ***Requirements:** A properly configured `display` section.*
