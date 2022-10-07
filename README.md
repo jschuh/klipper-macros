@@ -266,6 +266,12 @@ The following additional configuration options are available from
 
 > **Note:** See the [optional section](#bed-mesh) for additional macros.
 
+`BED_MESH_CHECK`
+
+Checks the `[bed_mesh]` config and warns if `mesh_min` or `mesh_max` could allow
+a move out of range during `BED_MESH_CALIBRATE`. This is run implictily at
+Klipper startup and at the start of `BED_MESH_CALIBRATE`.
+
 ### Bed Surface
 
 Provides a set of macros for selecting different bed surfaces with
