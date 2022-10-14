@@ -31,9 +31,10 @@ with g-code targeting Marlin printers. However, there are also some nice extras:
 
 ## A few warnings...
 
-* You must have `heater_bed` and `extruder` sections configured, otherwise the
-  macros won't even load. The Klipper macro system makes it impossible to handle
-  this without adding more end-user configuration, so I decided not to bother.
+* You must have a `heater_bed`, `extruder`, and other [sections listed
+  below](#klipper-setup) configured, otherwise the macros will ***force a
+  printer shutdown at startup***. Unfortunately, the Klipper macro
+  doesn't have a more graceful way of handling this sort of thing.
 * The multi-extruder and chamber heater functionality is very under-tested and
   may have bugs, since I haven't used it much at all. Patches welcome.
 * There's probably other stuff I haven't used enough to thoroughly, so use
