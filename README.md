@@ -26,8 +26,8 @@ with g-code targeting Marlin printers. However, there are also some nice extras:
   provided a much easier way to customize materials in the LCD menu (or at least
   I think so). I've also added confirmation dialogs for commands that would
   abort an active print.
-* **[Optimized mesh bed leveling](#bed-mesh-improvements)** - Probes only within the
-  printed area, which can save a lot of time on smaller prints.
+* **[Optimized mesh bed leveling](#bed-mesh-improvements)** - Probes only within
+  the printed area, which can save a lot of time on smaller prints.
 
 ## A few warnings...
 
@@ -266,6 +266,11 @@ The following additional configuration options are available from
    partial bed probes.
 
 > **Note:** See the [optional section](#bed-mesh) for additional macros.
+
+> **Note:** The bed mesh optimizations are silently disabled for delta printers
+  (because jinja2 lacks the necessary math support) and when the mesh parameters
+  include a [`RELATIVE_REFERENCE_INDEX`](https://www.klipper3d.org/Bed_Mesh.html#the-relative-reference-index)
+  (which is cinompatible with dynamic mesh generation).
 
 `BED_MESH_CHECK`
 
