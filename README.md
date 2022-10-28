@@ -312,6 +312,14 @@ argument for `OFFSET` is provided the current offset is displayed.
 > offset for the active surface. This makes the bed surface work with Z offset
 > adjustments made via any interface or client.
 
+#### `ADJUST_SURFACE_OFFSETS`
+
+Adjusts surface offsets to account for changes in the Z endstop position or
+probe Z offset. A message to invoke this command will be shown in the console
+when a relevant change is made to `printer.cfg`.
+
+* `IGNORE` - Set to 1 to reset the saved offsets without adjusting the surfaces.
+
 ### Beep
 
 Implements the M300 command (if a corresponding `[output_pin beeper]` section is
