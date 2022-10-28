@@ -78,7 +78,12 @@ overridden by creating a corresponding variable with a new value in your
 #  {'name' : 'PLA',  'extruder' : 200.0, 'bed' : 60.0},
 #  {'name' : 'PETG', 'extruder' : 230.0, 'bed' : 85.0},
 #  {'name' : 'ABS',  'extruder' : 245.0, 'bed' : 110.0, 'chamber' : 60}]
-gcode: # This line required by Klipper.
+gcode: 
+# Any code you put here will run at klipper startup, after the initialization
+# for these macros. For example, you could uncomment the following line to
+# automatically adjust your bed surface offsets to account for any changes made
+# to your Z endstop or probe offset.
+#   ADJUST_SURFACE_OFFSETS
 
 # This line includes all the standard macros.
 [include klipper-macros/*.cfg]
