@@ -72,7 +72,7 @@ overridden by creating a corresponding variable with a new value in your
 # Length (in mm) of filament to load (bowden tubes will be longer).
 #variable_load_length: 90.0
 # Hide the Octoprint LCD menu since I don't use it.
-#variable_menu_show_octoprint: 0
+#variable_menu_show_octoprint: False
 # Customize the filament menus (up to 10 entries).
 #variable_menu_temperature: [
 #  {'name' : 'PLA',  'extruder' : 200.0, 'bed' : 60.0},
