@@ -28,6 +28,10 @@ with g-code targeting Marlin printers. However, there are also some nice extras:
   abort an active print.
 * **[Optimized mesh bed leveling](#bed-mesh-improvements)** - Probes only within
   the printed area, which can save a lot of time on smaller prints.
+* **[Automated purge lines](#draw_purge_line)** - Set the desired extrusion
+  length as `variable_start_purge_length` in your config and a correctly sized
+  set of purge lines will be extruded in front of the print area immediately
+  before the print starts.
 
 ## A few warnings...
 
@@ -82,6 +86,8 @@ overridden by creating a corresponding variable with a new value in your
 #  {'name' : 'PLA',  'extruder' : 200.0, 'bed' : 60.0},
 #  {'name' : 'PETG', 'extruder' : 230.0, 'bed' : 85.0},
 #  {'name' : 'ABS',  'extruder' : 245.0, 'bed' : 110.0, 'chamber' : 60}]
+# Length of filament (in millimeters) to purge at print start.
+#variable_start_purge_length: 30 # This value works for most setups.
 gcode: # This line is required by Klipper.
 # Any code you put here will run at klipper startup, after the initialization
 # for these macros. For example, you could uncomment the following line to
@@ -149,8 +155,11 @@ into the relevant sections.
 ```
 M190 S0
 M109 S0
-PRINT_START EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count}
-; Any purge, intro lines, etc. go after this...
+PRINT_START EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count} NOZZLE_SIZE={nozzle_diameter[0]}
+
+; This is the place to put slicer purge lines if you haven't set a non-zero
+; variable_start_purge_length to have START_PRINT automatically purge (e.g. if
+; using a Mosaic Palette, which requires the slicer to generate the purge).
 ```
 
 #### End G-code
@@ -208,8 +217,11 @@ configuration steps listed below.
 ```
 M190 S0
 M109 S0
-PRINT_START EXTRUDER={material_print_temperature_layer_0} BED={material_bed_temperature_layer_0}
-; Any purge, intro lines, etc. go after this...
+PRINT_START EXTRUDER={material_print_temperature_layer_0} BED={material_bed_temperature_layer_0} NOZZLE_SIZE={machine_nozzle_size}
+
+; This is the place to put slicer purge lines if you haven't set a non-zero
+; variable_start_purge_length to have START_PRINT automatically purge (e.g. if
+; using a Mosaic Palette, which requires the slicer to generate the purge).
 ```
 
 #### End G-code
@@ -341,6 +353,62 @@ Emits an audible tone.
 
 * `P` *(default: `variable_beep_duration`)* - Duration of tone.
 * `S` *(default: `variable_beep_frequency`)* - Frequency of tone.
+
+### Draw
+
+Provides convenience methods for extruding along a path and drawing purge lines.
+
+> **Note:** The drawing macros require every `extruder` config(s) to have
+> correct `nozzle_diameter` and `filament_diameter` settings.
+
+#### DRAW_LINE_TO
+
+Extrudes a line of filament at the specified height and width from the current
+coordinate to the supplied XY coordinate.
+
+* `X` *(default: current X position)* - Absolute X coordinate to draw to.
+* `Y` *(default: current Y position)* - Absolute Y coordinate to draw to.
+* `HEIGHT` *(default: set via `SET_DRAW_PARAMS`)* - Height (in mm) used to
+  calculate extrusion volume.
+* `WIDTH` *(default: set via `SET_DRAW_PARAMS`)* - Extrusion width in mm.
+* `FEEDRATE` *(default: set via `SET_DRAW_PARAMS`)* - Drawing feedrate in mm/m.
+
+> **Note:** The Z axis position must be set prior to caling this macro. The
+> `HEIGHT` parameter is used only to calculate the extrusion volume.
+
+#### SET_DRAW_PARAMS
+
+Sets the default parameters used by DRAW_LINE_TO. This is helpful in reducing
+`DRAW_LINE_TO` command line lengths (particluarly important when debugging in
+the console).
+
+* `HEIGHT` *(optional; 0.2mm at startup)* - Height (in mm) used to
+  calculate extrusion volume.
+* `WIDTH` *(optional; nozzle diameter at startup)* - Extrusion width in mm.
+* `FEEDRATE` *(optional; 1200mm/m at startup)*  - Drawing feedrate in mm/m.
+
+#### DRAW_PURGE_LINE
+
+Moves to a position at the front edge of the first print layer and purges the
+specified length of filament as a line (or rows of lines) in front of the
+supplied print area. If no print area is specified the purge lines are drawn at
+the front edge of the maximum printable area. If no printable area is set it
+defaults to the respective axis limits.
+
+* `PRINT_MIN` *(default: `variable_print_min`)* - Upper boundary of print.
+* `PRINT_MAX` *(default: `variable_print_max`)* - Lower boundary of print.
+* `HEIGHT` *(default: 62.5% of nozzle diameter)* - Extrusion height in mm.
+* `WIDTH` *(default: 125% of nozzle diameter)* - Extrusion width in mm.
+* `LENGTH` *(default: `variable_start_purge_length`)* - Length of filament
+  to purge. *The default in `variable_start_purge_length` is also the amount
+  that is automatically purged at print start.*
+
+> **Note:** You must set `variable_print_min` and `variable_print_max` if the
+> X and Y axis limits in your config allow your toolhead to move outside the
+> printable area (e.g. for dockable probes or purge buckets).
+
+> **Note:** If your print touches the front edge of the bed it will overlap with
+> with the extrusions from `DRAW_PURGE_LINE`.
 
 ### Fans
 
@@ -591,6 +659,8 @@ probes to the appropriate density (this can dramatically reduce probe times for 
 * `CHAMBER` *(optional)* - Chamber heater starting temperature.
 * `MESH_MIN` *(optional)* - Minimum x,y coordinate of the first layer.
 * `MESH_MAX` *(optional)* - Maximum x,y coordinate of the first layer.
+* `NOZZLE_SIZE` *(default: nozzle_diameter)* - Nozzle diameter of the primary
+   extruder.
 * `LAYERS` *(optional)* - Total number of layers in the print.
 
 #### `PRINT_END`
