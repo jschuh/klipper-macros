@@ -8,9 +8,9 @@ people might as well.
 
 ## What can I do with these?
 
-Most of these macros just improve basic functionality (e.g.
-[selectable build sheets](#bed-surface)) and Klipper compatability
-with g-code targeting Marlin printers. However, there are also some nice extras:
+Most of these macros improve basic functionality (e.g. [selectable build sheets
+](#bed-surface)) and Klipper compatability with g-code targeting Marlin
+printers. However, there are also some nice extras:
 
 * **[Schedule commands at heights and layer changes](#layer-triggers)** -
   This is similar to what your slicer can already do, but I find it simpler, and
@@ -35,14 +35,27 @@ with g-code targeting Marlin printers. However, there are also some nice extras:
 
 ## A few warnings...
 
+* **BACK UP YOUR FULL CONFIG BEFORE MAKING ANY CHANGES!!!** I've seen so many
+  newcomers desperately looking for help on public forums because they didn't
+  have a good config to fall back to after messing up their current config while
+  experimenting with other people's macros. You'll save yourself and everyone
+  else a whole lot of time and nuisance if you just make sure you always have a
+  working config backed up.
+* **You really should avoid custom macros like this until you're comfortable
+  using Klipper with a basic config.** Advanced Klipper macros tend to rely
+  extensively on [monkey patching](https://en.wikipedia.org/wiki/Monkey_patch),
+  which can lead to problems with unusual configurations or when mixing macros
+  from various sources. So, you really want to know what you're doing before
+  including macros someone else's macros—particularly when including macros
+  with overlapping functionality from different sources.
 * You must have a `heater_bed`, `extruder`, and other [sections listed
   below](#klipper-setup) configured, otherwise the macros will ***force a
-  printer shutdown at startup***. Unfortunately, the Klipper macro
+  printer shutdown at startup***. Unfortunately, the Klipper macro system
   doesn't have a more graceful way of handling this sort of thing.
 * The multi-extruder and chamber heater functionality is very under-tested and
   may have bugs, since I haven't used it much at all. Patches welcome.
-* There's probably other stuff I haven't used enough to thoroughly, so use
-  at your own risk.
+* There's probably other stuff I haven't used enough to test thoroughly, so use
+  these macros at your own risk.
 
 # Installation
 
@@ -53,19 +66,33 @@ To install the macros, first clone this repository inside of your
 git clone https://github.com/jschuh/klipper-macros.git
 ```
 
-Then paste the below section into your `printer.cfg` to get started.
-The settings are all listed in [globals.cfg](globals.cfg#L5), and can be
-overridden by creating a corresponding variable with a new value in your
-`[gcode_macro _km_options]` section.
+Then paste the below sections into your `printer.cfg` to get started. Or even
+better, paste all of it into a seperate file in the same path as your config,
+and include that file. That will make it easier if you want to remove these
+macros in the future.
+
+You may need to customize some settings for your own config. All configurable
+settings are in [globals.cfg](globals.cfg#L5), and can be overridden by creating
+a corresponding variable with a new value in your `[gcode_macro _km_options]`
+section.
 
 > **Note:**  The paths in this README follow [Moonraker's data folder structure.
 > ](https://moonraker.readthedocs.io/en/latest/installation/#data-folder-structure)
 > You may need to change them if you are using a different structure.
 
-> **Note:** If you have a `[homing_override]` section you will need to update any
-> `G28` commands in that section to use to `G28.6245197` instead (which is the
-> renamed version of Klipper's built-in `G28`). Failure to do this will cause
-> `G28` commands to error out with the message *"Macro G28 called recursively"*.
+> **Note:** Make sure you don't currently have any macros that provide the same
+> basic function as the macros in this repository (e.g. the default
+> [Mainsail](https://docs.mainsail.xyz/configuration#macros) or
+> [fluidd](https://docs.fluidd.xyz/configuration/initial_setup#macros) macros).
+> As a rule, you should avoid using multiple sets of macros that override the
+> same base macro (unless you really know what you're doing) because conflicting
+> macros can cause all sorts of weird and frustrating errors. 
+
+> **Note:** If you have a `[homing_override]` section you will need to update
+> any `G28` commands in that section to use to `G28.6245197` instead (which is
+> the renamed version of Klipper's built-in `G28`). Failure to do this will
+> cause `G28` commands to error out with the message ***Macro G28 called
+> recursively***.
 
 # Klipper Setup
 
@@ -104,9 +131,11 @@ gcode: # This line is required by Klipper.
 #[include klipper-macros/optional/bed_mesh.cfg]
 
 # The sections below here are required for the macros to work.
+# You may already have these elsewhere in your config, so you may have to remove
+# or one or merge them.
 [idle_timeout]
 gcode:
-  _KM_IDLE_TIMEOUT
+  _KM_IDLE_TIMEOUT # This line must be in your idle_timeout section
 
 [pause_resume]
 
@@ -116,7 +145,7 @@ gcode:
 filename: ~/printer_data/variables.cfg # UPDATE THIS FOR YOUR PATH!!!
 
 [virtual_sdcard]
-path: ~/gcode_files
+path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
 
 [display_status]
 
@@ -125,21 +154,6 @@ path: ~/gcode_files
 #[gcode_macro CANCEL_PRINT]
 #rename_existing: CANCEL_PRINT_BASE
 #gcode: CANCEL_PRINT_BASE{% for k in params %}{' '~k~'='~params[k]}{% endfor %}
-```
-
-## Moonraker Configuration
-
-Paste the following into your `moonraker.conf` if you want the macros to
-automatically update directly from this repo.
-
-```
-[update_manager klipper-macros]
-type: git_repo
-origin: https://github.com/jschuh/klipper-macros.git
-path: ~/printer_data/config/klipper-macros # UPDATE THIS FOR YOUR PATH!!!
-primary_branch: main
-is_system_service: False
-managed_services: klipper
 ```
 
 ## Slicer Configuration
@@ -260,6 +274,62 @@ exactly, with no leading or trailing spaces.*
 - Replace: `\1\nBEFORE_LAYER_CHANGE LAYER=\2\nAFTER_LAYER_CHANGE`
 - Use Regular Expressions: ☑️
 
+## Moonraker Configuration
+
+Once you have the macros working and are comfortable using them, you can have
+Moonraker keep them up to date by adding the following into your
+`moonraker.conf`.
+
+```
+[update_manager klipper-macros]
+type: git_repo
+origin: https://github.com/jschuh/klipper-macros.git
+path: ~/printer_data/config/klipper-macros # UPDATE THIS FOR YOUR PATH!!!
+primary_branch: main
+is_system_service: False
+managed_services: klipper
+```
+
+> **Note:** I'd advise against adding the auto-update entries to Moonraker until
+> you have everything working well, because it can make uninstallation a bit
+> harder due to how Moonraker's autoupdate behavior.
+
+## Removal
+
+If you choose to uninstall these macros you basically need to reverse the
+installation steps. However, the most critical parts are listed below.
+
+### Klipper Configuration Removal
+
+Ensure that you remove the following from your Klipper config (and any included
+configs):
+
+* The full `[gcode_macro _km_options]` section
+* Any `include` sections with `klipper-macros` in the path
+* `_KM_IDLE_TIMEOUT` in the `[idle_timeout]` section
+
+If you do not have Moonraker autoupdates configured you can delete the
+`klipper-macros` directory with something like the following command (adjusted
+for your own paths):
+
+```
+rm -rf ~/printer_data/config/klipper-macros
+```
+
+### Slicer Configuration Removal
+
+If you do not want to change your slicer config, you should be able to leave
+it as is, because it generates only a small amount of additional gcode, and the
+basic parameters should work with any other `PRINT_START` macros. 
+
+## Moonraker Configuration Removal
+
+If you've configured Moonraker auto-updates you will need to remove the entire
+`[update_manager klipper-macros]` section and restart moonraker prior to
+deleting the `klipper-macros` directory, otherwise Moonraker may attempt to
+recreate it. You may also find that it takes a few Moonraker update checks and
+restarts before the klipper-macros section disappears from the UI.
+
 # Command Reference
 
 ## Customization
@@ -290,9 +360,9 @@ The following additional configuration options are available from
 > **Note:** See the [optional section](#bed-mesh) for additional macros.
 
 > **Note:** The bed mesh optimizations are silently disabled for delta printers
-  (because jinja2 lacks the necessary math support) and when the mesh parameters
-  include a [`RELATIVE_REFERENCE_INDEX`](https://www.klipper3d.org/Bed_Mesh.html#the-relative-reference-index)
-  (which is cinompatible with dynamic mesh generation).
+  and when the mesh parameters include a [`RELATIVE_REFERENCE_INDEX`
+  ](https://www.klipper3d.org/Bed_Mesh.html#the-relative-reference-index)
+  (which is icnompatible with dynamic mesh generation).
 
 `BED_MESH_CHECK`
 
@@ -309,8 +379,6 @@ Corresponding LCD menus for sheet selection and babystepping will be added to
 *Setup* and *Tune* if [`lcd_menus.cfg`](#lcd-menus) is included. Any Z offset
 adjustments made in the LCD menus, console, or other clients (e.g. Mainsail,
 Fluidd) will be applied to the current sheet and persisted across restarts.
-
-Lists all available surfaces. 
 
 #### `SET_SURFACE_ACTIVE`
 
@@ -364,7 +432,7 @@ Provides convenience methods for extruding along a path and drawing purge lines.
 #### DRAW_LINE_TO
 
 Extrudes a line of filament at the specified height and width from the current
-coordinate to the supplied XY coordinate.
+coordinate to the supplied XY coordinate (using the currently active extruder).
 
 * `X` *(default: current X position)* - Absolute X coordinate to draw to.
 * `Y` *(default: current Y position)* - Absolute Y coordinate to draw to.
@@ -413,7 +481,8 @@ defaults to the respective axis limits.
 ### Fans
 
 Implements scaling parameters that alter the behavior of the M106 command. Once
-set, these parameters apply to any fan speed until they are cleared.
+set, these parameters apply to any fan speed until they are cleared (by default
+this happens at the start and end of the print).
 
 #### `SET_FAN_SCALING`
 
@@ -462,7 +531,8 @@ heater off regardless of scaling parameters.
 #### `SET_HEATER_SCALING`
 
 Sets scaling parameters for the specified heater. If run without any arguments
-any currently scaled heaters and thier scaling parameters will be listed.
+any currently scaled heaters and thier scaling parameters will be listed. By
+default the scaling is cleared at the start and end of a print.
 
 * `HEATER` - The name of the heater to scale.
 * `BOOST` *(default: `0.0`)* - Added to a non-zero target temperature.
@@ -585,7 +655,7 @@ Cancels all g-code commands previously scheduled at any layer or height.
 > **Note:** If any triggers cause an exception the current print will
 > abort. The convenience macros above validate their arguments as much as is
 > possible to reduce the chances of an aborted print, but they cannot entirely
-> eliminate the risk of a macro doig something that aborts the print.
+> eliminate the risk of a macro doing something that aborts the print.
 
 ### Park
 
@@ -647,12 +717,13 @@ Cancels the print and performs all the same functions as `PRINT_END`.
 
 #### `PRINT_START`
 
-Sets up the printer prior to strating a print (called from the slicer's print
+Sets up the printer prior to starting a print (called from the slicer's print
 start g-code). A target `CHAMBER` temperature may be provided if a 
 `[heater_generic chamber]` section is present in the klipper config.
 If `MESH_MIN` and `MESH_MAX` are provided, then `BED_MESH_CALIBRATE` will probe
 only the area within the specified rectangle, and will scale the number of
-probes to the appropriate density (this can dramatically reduce probe times for smaller prints).
+probes to the appropriate density (this can dramatically reduce probe times for
+smaller prints).
 
 * `BED` - Bed heater starting temperature.
 * `EXTRUDER` - Extruder heater starting temperature.
