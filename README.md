@@ -89,7 +89,7 @@ section.
 > macros can cause all sorts of weird and frustrating problems. 
 
 > **Note:** If you have a `[homing_override]` section you will need to update
-> any `G28` commands in that section to use to `G28.6245197` instead (which is
+> any `G28` commands in the gcode part to use `G28.6245197` instead (which is
 > the renamed version of Klipper's built-in `G28`). Failure to do this will
 > cause `G28` commands to error out with the message ***Macro G28 called
 > recursively***.
@@ -601,6 +601,12 @@ See Klipper `G28` documentation for general information and detail on the other
 arguments.
 
 * `O` - Omits axes from the homing procedure if they are already homed.
+
+> **Note:** If you have a `[homing_override]` section you will need to update
+> any `G28` commands in the gcode part to use `G28.6245197` instead (which is
+> the renamed version of Klipper's built-in `G28`). Failure to do this will
+> cause `G28` commands to error out with the message ***Macro G28 called
+> recursively***.
 
 ### Layer Triggers
 
