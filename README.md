@@ -46,8 +46,8 @@ printers. However, there are also some nice extras:
   extensively on [monkey patching](https://en.wikipedia.org/wiki/Monkey_patch),
   which can lead to problems with unusual configurations or when mixing macros
   from various sources. So, you really want to know what you're doing before
-  including macros someone else's macros—particularly when including macros
-  with overlapping functionality from different sources.
+  including someone else's macros—particularly when including macros with
+  overlapping functionality from different sources.
 * You must have a `heater_bed`, `extruder`, and other [sections listed
   below](#klipper-setup) configured, otherwise the macros will ***force a
   printer shutdown at startup***. Unfortunately, the Klipper macro system
@@ -86,7 +86,7 @@ section.
 > [fluidd](https://docs.fluidd.xyz/configuration/initial_setup#macros) macros).
 > As a rule, you should avoid using multiple sets of macros that override the
 > same base macro (unless you really know what you're doing) because conflicting
-> macros can cause all sorts of weird and frustrating errors. 
+> macros can cause all sorts of weird and frustrating problems. 
 
 > **Note:** If you have a `[homing_override]` section you will need to update
 > any `G28` commands in that section to use to `G28.6245197` instead (which is
@@ -130,12 +130,12 @@ gcode: # This line is required by Klipper.
 # Optimized bed leveling
 #[include klipper-macros/optional/bed_mesh.cfg]
 
-# The sections below here are required for the macros to work.
-# You may already have these elsewhere in your config, so you may have to remove
-# or one or merge them.
+# The sections below here are required for the macros to work. If your config
+# already has some of these sections you should merge the duplicates into one
+# (or if they are identical just remove one of them).
 [idle_timeout]
 gcode:
-  _KM_IDLE_TIMEOUT # This line must be in your idle_timeout section
+  _KM_IDLE_TIMEOUT # This line must be in your idle_timeout section.
 
 [pause_resume]
 
@@ -150,10 +150,9 @@ path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
 [display_status]
 
 # Uncomment the sections below if Fluidd complains (because it's confused).
-#
 #[gcode_macro CANCEL_PRINT]
-#rename_existing: CANCEL_PRINT_BASE
-#gcode: CANCEL_PRINT_BASE{% for k in params %}{' '~k~'='~params[k]}{% endfor %}
+#rename_existing: CANCEL_PRINT_FAKE_BASE
+#gcode: CANCEL_PRINT_FAKE_BASE {rawparams}
 ```
 
 ## Slicer Configuration
