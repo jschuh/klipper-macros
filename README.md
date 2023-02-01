@@ -57,6 +57,50 @@ printers. However, there are also some nice extras:
 * There's probably other stuff I haven't used enough to test thoroughly, so use
   these macros at your own risk.
 
+# Reporting Bugs
+
+You can [report bugs via Github](
+https://github.com/jschuh/klipper-macros/issues/new/choose). I will probably
+respond within a few days (almost certainly within a week). I probably won't
+respond through other channels (e.g. Discord, Twitter), because I don't find
+them useful for handling bug reports.
+
+Prior to making any reports please double check that you followed the
+[installation instructions](#installation). Many of the bug reports I've
+received were simply a case of not following those instructions.
+
+# Contributing
+
+I'm happy to accept bugfix PRs. I'm also potentially open to new features or
+additions. That stated, I wrote these macros mainly for personal use on my
+printers. So, I may decline the PR if it's something I'm not interested in or
+just looks like it would be a hassle for me to maintain.
+
+## Formatting
+
+There's no standard style for Klipper macros, so please just try to follow the
+style in the files. That stated, here are a few rules to remember:
+
+ * Wrap at 80 characters if at all possible
+ * Indent 2 spaces, and in line with the logical block when wrapping (no tabs)
+ * Prefix internal macros with `_` or `_km_`
+ * Prefix any sort of global state with `_KM_` (e.g. `_KM_SAVE_GCODE_STATE`)
+
+## Commit Messages
+
+These are the rules for commit messages, but you can also just look at the
+commit log and follow the observed pattern:
+
+ * Use the 50/72 rule for commit messages: No more than 50 characters in the
+   title and break lines in the description at 72 characters.
+ * Begin the title with the module name (usually the main file being modified,
+   minus any extension) followed by a colon.
+ * Title-only commit messages are fine for simple commits, but be sure to
+   include a blank line after the title.
+ * Squash multiple commits if what you're working on makes more sense as a
+   single logical commit. _This might require you to do a force push on an open
+   PR._
+
 # Installation
 
 To install the macros, first clone this repository inside of your
