@@ -57,17 +57,24 @@ printers. However, there are also some nice extras:
 * There's probably other stuff I haven't used enough to test thoroughly, so use
   these macros at your own risk.
 
+# Troubleshooting
+
+* Double check that you followed the [installation instructions](#installation)
+  and are not seeing any console or log errors.
+* Ensure you've restarted Klipper after any config changes.
+* Run `CHECK_KM_CONFIG` in the Klipper console and fix any errors it reports
+  (it won't output anything if there are no config errors).
+* Run `_INIT_SURFACES` in the Klipper console to validate that bed surfaces are
+  being initialized without any errors.
+
 # Reporting Bugs
 
-You can [report bugs via Github](
+If you've followed the troubleshooting steps and were unable to resolve the
+issue you can [report a bug via Github](
 https://github.com/jschuh/klipper-macros/issues/new/choose). I will probably
 respond within a few days (almost certainly within a week). I probably won't
 respond through other channels (e.g. Discord, Twitter), because I don't find
 them useful for handling bug reports.
-
-Prior to making any reports please double check that you followed the
-[installation instructions](#installation). Many of the bug reports I've
-received were simply a case of not following those instructions.
 
 # Contributing
 
