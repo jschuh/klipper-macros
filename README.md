@@ -388,6 +388,9 @@ All features are configured by setting `variable_` values in the
 `[gcode_macro _km_options]` section. All available variables and their purpose
 are listed in [globals.cfg](globals.cfg#L5).
 
+> **Note:** `PRINT_START` specific customizations are [covered in more detail
+  below](#print-start-and-end).
+
 ### Bed Mesh Improvements
 
 `BED_MESH_CALIBRATE_FAST`
@@ -789,6 +792,77 @@ smaller prints).
 * `NOZZLE_SIZE` *(default: nozzle_diameter)* - Nozzle diameter of the primary
    extruder.
 * `LAYERS` *(optional)* - Total number of layers in the print.
+
+These are the customization options you can add to your
+`[gcode_macro _km_options]` section to alter `PRINT_START` behavior:
+
+* `variable_start_extruder_preheat_scale` *(default: 0.5)* - This value is
+  multiplied by the target extruder temperature and the result is used as the
+  preheat value for the extruder while the bed is heating. This is done to
+  reduce oozing from the extruder while the bed is heating or being probed. Set
+  to `1.0` to preheat the extruder to the full target temperature, or to `0.0`
+  to not preheat the extruder at all until the bed reaches temperature.
+
+* `variable_start_bed_heat_delay` *(default: 2000)* - This delay (in
+  microseconds) is used to allow the bed to stabilize after it reaches it's
+  target temperature. This is present to account for the fact that the
+  temperature sensors for most beds are located close to the heating element,
+  and thus will register as being at the target temperature before the surface
+  of the bed is. For larger or thicker beds you may want to increase this value.
+  For smaller or thinner beds you may want to disable this entirely by setting
+  it to `0`.
+
+* `variable_start_bed_heat_overshoot` *(default: 2.0)* - This value (in degrees
+  Celsius) is added to the supplied target bed temperature and use as the
+  initial target temperature when preheating the bed. After the bed preheats to
+  this target it there is a brief delay before the final target is set. This
+  allows the bed to stabilize at it's final temperature more quickly. For
+  smaller or thinner beds you may want to reduce this value or disable it
+  entirely by setting it to `0.0`.
+
+* `variable_start_level_bed_at_temp` *(default: True if bed_mesh is configured)*
+  - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
+  #bed-mesh-improvements) once the bed has stabilized at its target temperature.
+
+* `variable_start_home_z_at_temp` *(default: True)* - Rehomes the Z axis once
+  the bed reaches its target temperature, to account for movement during
+  heating.
+
+* `variable_start_clear_adjustments_at_end` *(default: True)* - Clears temporary
+  adjustments after the print completes or is cancelled (e.g. feedrate,
+  flow percentage).
+
+* `variable_start_purge_length` *(default: 0.0)* - Length of filament (in
+  millimeters) to purge after the extruder finishes heating and prior to
+  starting the print. For most setups `30` is a good starting point.
+
+* `variable_start_purge_clearance` *(default: 5.0)* Distance (in millimeters)
+  between the purge lines and the print area (if a `start_purge_length` is 
+  provided).
+
+You can further override the `PRINT_START` macro by declaring your own wrapper.
+This can be useful for things like loading mesh/skew profiles, or any other
+setup your printer may need prior to printing.
+
+Here's a skeleton of a `PRINT_START` override wrapper:
+
+```
+[gcode_macro PRINT_START]
+rename_existing: KM_PRINT_START
+gcode:
+
+  # Put macro code here to run before PRINT_START.
+
+  KM_PRINT_START {rawparams}
+
+  # Put macro code here to run after PRINT_START but before the print gcode
+```
+
+> **Note:** You can use this same pattern to wrap other macros in order to
+  account for customizations specific to your printer. E.g. If you have a
+  dockable probe you may choose to wrap `BED_MESH_CALIBRATE` with the
+  appropriate docking/undocking commands, or wrap `DRAW_PURGE_LINE` to ensure
+  filament is loaded from a multi-material unit prior to printing.
 
 #### `PRINT_END`
 
