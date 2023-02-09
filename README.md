@@ -820,8 +820,8 @@ These are the customization options you can add to your
   smaller or thinner beds you may want to reduce this value or disable it
   entirely by setting it to `0.0`.
 
-* `variable_start_level_bed_at_temp` *(default: True if bed_mesh is configured)*
-  - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
+* `variable_start_level_bed_at_temp` *(default: True if bed_mesh configured)* -
+  If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
   #bed-mesh-improvements) once the bed has stabilized at its target temperature.
 
 * `variable_start_home_z_at_temp` *(default: True)* - Rehomes the Z axis once
@@ -840,9 +840,9 @@ These are the customization options you can add to your
   between the purge lines and the print area (if a `start_purge_length` is 
   provided).
 
-You can further override the `PRINT_START` macro by declaring your own wrapper.
-This can be useful for things like loading mesh/skew profiles, or any other
-setup your printer may need prior to printing.
+You can further customize the `PRINT_START` macro by declaring your own override
+wrapper. This can be useful for things like loading mesh/skew profiles, or any
+other setup that may need to be performed prior to printing.
 
 Here's a skeleton of a `PRINT_START` override wrapper:
 
