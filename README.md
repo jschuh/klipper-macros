@@ -820,9 +820,10 @@ These are the customization options you can add to your
   smaller or thinner beds you may want to reduce this value or disable it
   entirely by setting it to `0.0`.
 
-* `variable_start_level_bed_at_temp` *(default: True if bed_mesh configured)* -
-  If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
-  #bed-mesh-improvements) once the bed has stabilized at its target temperature.
+* `variable_start_level_bed_at_temp` *(default: True if `bed_mesh` configured
+  )* - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
+  #bed-mesh-improvements) after the bed has stabilized at its target
+  temperature.
 
 * `variable_start_home_z_at_temp` *(default: True)* - Rehomes the Z axis once
   the bed reaches its target temperature, to account for movement during
@@ -839,6 +840,14 @@ These are the customization options you can add to your
 * `variable_start_purge_clearance` *(default: 5.0)* Distance (in millimeters)
   between the purge lines and the print area (if a `start_purge_length` is 
   provided).
+
+* `variable_start_quad_gantry_level_at_temp` *(default: True if
+  `quad_gantry_level` configured)* - If true the `PRINT_START` macro will run
+  `QUAD_GANTRY_LEVEL` after the bed has stabilized at its target temperature.
+
+* `variable_start_z_tilt_adjust_at_temp`  *(default: True if `z_tilt`
+  configured)* - If true the `PRINT_START` macro will run `Z_TILT_ADJUST` after
+  the bed has stabilized at its target temperature.
 
 You can further customize the `PRINT_START` macro by declaring your own override
 wrapper. This can be useful for things like loading mesh/skew profiles, or any
