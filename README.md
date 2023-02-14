@@ -825,9 +825,9 @@ These are the customization options you can add to your
   #bed-mesh-improvements) after the bed has stabilized at its target
   temperature.
 
-* `variable_start_home_z_at_temp` *(default: True)* - Rehomes the Z axis once
-  the bed reaches its target temperature, to account for movement during
-  heating.
+* `variable_start_home_z_at_temp` *(default: True if `probe:z_virtual_endstop`
+  configured)* - Rehomes the Z axis once the bed reaches its target temperature,
+  to account for movement during heating.
 
 * `variable_start_clear_adjustments_at_end` *(default: True)* - Clears temporary
   adjustments after the print completes or is cancelled (e.g. feedrate,
