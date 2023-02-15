@@ -803,6 +803,12 @@ These are the customization options you can add to your
   to `1.0` to preheat the extruder to the full target temperature, or to `0.0`
   to not preheat the extruder at all until the bed reaches temperature.
 
+* `variable_start_extruder_set_target_before_level` *(default: True)* - If
+  `True` the extruder is set to its target temperature before bed leveling
+  begins. If `False` the target is set after bed level completes. Setting `True`
+  warms up the extruder faster and `False` prevents oozing during bed level.
+  The extruder preheat is applied independent of this setting.
+
 * `variable_start_bed_heat_delay` *(default: 2000)* - This delay (in
   microseconds) is used to allow the bed to stabilize after it reaches it's
   target temperature. This is present to account for the fact that the
