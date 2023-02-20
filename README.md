@@ -796,19 +796,6 @@ smaller prints).
 These are the customization options you can add to your
 `[gcode_macro _km_options]` section to alter `PRINT_START` behavior:
 
-* `variable_start_extruder_preheat_scale` *(default: 0.5)* - This value is
-  multiplied by the target extruder temperature and the result is used as the
-  preheat value for the extruder while the bed is heating. This is done to
-  reduce oozing from the extruder while the bed is heating or being probed. Set
-  to `1.0` to preheat the extruder to the full target temperature, or to `0.0`
-  to not preheat the extruder at all until the bed reaches temperature.
-
-* `variable_start_extruder_set_target_before_level` *(default: True)* - If
-  `True` the extruder is set to its target temperature before bed leveling
-  begins. If `False` the target is set after bed level completes. Setting `True`
-  warms up the extruder faster and `False` prevents oozing during bed level.
-  The extruder preheat is applied independent of this setting.
-
 * `variable_start_bed_heat_delay` *(default: 2000)* - This delay (in
   microseconds) is used to allow the bed to stabilize after it reaches it's
   target temperature. This is present to account for the fact that the
@@ -825,6 +812,23 @@ These are the customization options you can add to your
   allows the bed to stabilize at it's final temperature more quickly. For
   smaller or thinner beds you may want to reduce this value or disable it
   entirely by setting it to `0.0`.
+
+* `variable_start_end_park_y` *(default: `print_max` Y coordinate)* - The final
+  Y position of the toolhead in the `PRINT_END` macro, to ensure that the
+  toolhead is out of the way when the bed is presented for print removal.
+
+* `variable_start_extruder_preheat_scale` *(default: 0.5)* - This value is
+  multiplied by the target extruder temperature and the result is used as the
+  preheat value for the extruder while the bed is heating. This is done to
+  reduce oozing from the extruder while the bed is heating or being probed. Set
+  to `1.0` to preheat the extruder to the full target temperature, or to `0.0`
+  to not preheat the extruder at all until the bed reaches temperature.
+
+* `variable_start_extruder_set_target_before_level` *(default: True)* - If
+  `True` the extruder is set to its target temperature before bed leveling
+  begins. If `False` the target is set after bed level completes. Setting `True`
+  warms up the extruder faster and `False` prevents oozing during bed level.
+  The extruder preheat is applied independent of this setting.
 
 * `variable_start_level_bed_at_temp` *(default: True if `bed_mesh` configured
   )* - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
