@@ -830,6 +830,14 @@ These are the customization options you can add to your
   warms up the extruder faster and `False` prevents oozing during bed level.
   The extruder preheat is applied independent of this setting.
 
+* `variable_start_gcode_before_print` *(default: None)* - Optional user-supplied
+  gcode run after any leveling operations are complete and the bed, extruder,
+  and chamber are all stabilized at their target temperatures. Immediately after
+  this gcode executes the purge line will be printed (if specified) and then the
+  file from the virtual sdcard will begin printing. This is a useful to add any
+  probe docking commands, loading from a multi-material unit, or other
+  operations that must occur before any filament is extruded.
+
 * `variable_start_level_bed_at_temp` *(default: True if `bed_mesh` configured
   )* - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
   #bed-mesh-improvements) after the bed has stabilized at its target
@@ -880,8 +888,7 @@ gcode:
 > **Note:** You can use this same pattern to wrap other macros in order to
   account for customizations specific to your printer. E.g. If you have a
   dockable probe you may choose to wrap `BED_MESH_CALIBRATE` with the
-  appropriate docking/undocking commands, or wrap `DRAW_PURGE_LINE` to ensure
-  filament is loaded from a multi-material unit prior to printing.
+  appropriate docking/undocking commands.
 
 #### `PRINT_END`
 
