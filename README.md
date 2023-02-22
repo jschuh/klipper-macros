@@ -851,13 +851,16 @@ These are the customization options you can add to your
   adjustments after the print completes or is cancelled (e.g. feedrate,
   flow percentage).
 
+* `variable_start_purge_clearance` *(default: 5.0)* Distance (in millimeters)
+  between the purge lines and the print area (if a `start_purge_length` is
+  provided).
+
 * `variable_start_purge_length` *(default: 0.0)* - Length of filament (in
   millimeters) to purge after the extruder finishes heating and prior to
   starting the print. For most setups `30` is a good starting point.
 
-* `variable_start_purge_clearance` *(default: 5.0)* Distance (in millimeters)
-  between the purge lines and the print area (if a `start_purge_length` is 
-  provided).
+* `variable_start_purge_prime_length` *(default: 10.0)* Length of filament (in
+  millimeters) to prime the extruder before drawing the purge lines.
 
 * `variable_start_quad_gantry_level_at_temp` *(default: True if
   `quad_gantry_level` configured)* - If true the `PRINT_START` macro will run
