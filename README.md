@@ -61,11 +61,16 @@ printers. However, there are also some nice extras:
 
 * Double check that you followed the [installation instructions](#installation)
   and are not seeing any console or log errors.
-* Ensure you've restarted Klipper after any config changes.
+* Ensure that you're running the most current version of stock Klipper, and not
+  a fork or otherwise altered or outdated copy.
+* Ensure you're using the most current version of these macros and haven't
+  made changes to any files in the `klipper-macros` directory.
+* Ensure that you've restarted Klipper after any updates or config changes.
 * Run `CHECK_KM_CONFIG` in the Klipper console and fix any errors it reports
-  (it won't output anything if there are no config errors).
+  to the console and/or logs (it won't output anything if no config errors
+  were detected).
 * Run `_INIT_SURFACES` in the Klipper console to validate that bed surfaces are
-  being initialized without any errors.
+  being initialized without any errors reported to the console and/or logs.
 
 # Reporting Bugs
 
@@ -76,12 +81,30 @@ respond within a few days (almost certainly within a week). I probably won't
 respond through other channels (e.g. Discord, Twitter), because I don't find
 them useful for handling bug reports.
 
+Some important things to remember when reporting bugs:
+
+* **Paste the full text of the command that triggered the error, along with any
+  error messages printed to the console** (and relevant sections of the klipper
+  logs if appropriate).
+* **Attach your config to the bug report.** There's generally no way to diagnose
+  anything without the configs.
+* **Verify that your issue reproduces on the current, stock installation of
+  Klipper and klipper-macros.** Non-stock configurations and outdated versions
+  make diagnosis nearly impossible.
+* Please don't treat bug reports as a substitute for following the installation
+  and troubleshooting instructions.
+* If you file a feature request I will most likely close it (unless it's
+  something I was already planning on adding). Sorry, but I wrote these macros
+  to meet my own needs, so that's what I work on.
+
+> **Note:** Reports that do not follow the above guidelines _**will likely be
+> closed without any other action taken.**_
+
 # Contributing
 
-I'm happy to accept bugfix PRs. I'm also potentially open to new features or
-additions. That stated, I wrote these macros mainly for personal use on my
-printers. So, I may decline the PR if it's something I'm not interested in or
-just looks like it would be a hassle for me to maintain.
+I'm happy to accept bugfix PRs. I'm also potentially open to accepting new
+features or additions. However, I may decline the PR if it's something I'm not
+interested in or just looks like it would be a hassle for me to maintain.
 
 ## Formatting
 
@@ -125,7 +148,9 @@ macros in the future.
 You may need to customize some settings for your own config. All configurable
 settings are in [globals.cfg](globals.cfg#L5), and can be overridden by creating
 a corresponding variable with a new value in your `[gcode_macro _km_options]`
-section.
+section. _**Do not directly modify the variable declarations in globals.cfg.**_
+The macro initialization assumes certain default values, and direct
+modifications are likely to break things in very unexpected ways.
 
 > **Note:**  The paths in this README follow [Moonraker's data folder structure.
 > ](https://moonraker.readthedocs.io/en/latest/installation/#data-folder-structure)
