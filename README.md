@@ -71,6 +71,9 @@ printers. However, there are also some nice extras:
   were detected).
 * Run `_INIT_SURFACES` in the Klipper console to validate that bed surfaces are
   being initialized without any errors reported to the console and/or logs.
+* Verify your slicer settings and review that the gcode output is correct. Pay
+  particular attention the initialization portions of the gcode and the
+  parameters passed to PRINT_START.
 
 # Reporting Bugs
 
