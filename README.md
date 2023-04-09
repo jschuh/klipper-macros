@@ -708,11 +708,9 @@ g-code commands along with their associated layer or height.
   specified run the command at the next layer change.
 * `COMMAND` - The command to run at layer change. Take care to properly quote
   spaces and escape any special characters.
-* `BEFORE` *(default: `0`)* - Set to 1 run the command before the layer
-  change (i.e. immediately following completion of the previous layer). By
-  default commands run after the layer change (i.e. immediately preceding the
-  next layer). In most cases this distinction here doesn't matter, but it can
-  be important when dealing with toolchangers or other multi-material printing.
+* `CANCEL` *(default: `0`)* - Cancel the commands previously scheduled at the
+  given layer or height. If no `COMMAND` argument is provided all commands at
+  the specified `LAYER` or `HEIGHT` are cancelled.
 
 #### `CANCEL_ALL_LAYER_GCODE`
 
