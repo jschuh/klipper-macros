@@ -227,6 +227,7 @@ filename: ~/printer_data/variables.cfg # UPDATE THIS FOR YOUR PATH!!!
 path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
 
 [display_status]
+```
 
 ## Slicer Configuration
 
