@@ -230,6 +230,7 @@ path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
 ```
 
 # Uncomment the sections below if Fluidd complains (because it's confused).
+```
 #[gcode_macro CANCEL_PRINT]
 #rename_existing: CANCEL_PRINT_FAKE_BASE
 #gcode: CANCEL_PRINT_FAKE_BASE {rawparams}
