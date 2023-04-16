@@ -227,7 +227,6 @@ filename: ~/printer_data/variables.cfg # UPDATE THIS FOR YOUR PATH!!!
 path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
 
 [display_status]
-```
 
 # Uncomment the sections below if Fluidd complains (because it's confused).
 #[gcode_macro CANCEL_PRINT]
