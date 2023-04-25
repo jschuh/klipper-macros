@@ -500,8 +500,8 @@ present). This command causes the speaker to emit an audible tone.
 
 Emits an audible tone.
 
-* `P` *(default: `variable_beep_duration`)* - Duration of tone.
-* `S` *(default: `variable_beep_frequency`)* - Frequency of tone.
+* `P` *(default: `100`)* - Duration of tone (in milliseconds).
+* `S` *(default: `1000`)* - Frequency of tone.
 
 ### Draw
 
