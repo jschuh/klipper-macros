@@ -845,11 +845,12 @@ These are the customization options you can add to your
   to `1.0` to preheat the extruder to the full target temperature, or to `0.0`
   to not preheat the extruder at all until the bed reaches temperature.
 
-* `variable_start_extruder_set_target_before_level` *(default: True)* - If
-  `True` the extruder is set to its target temperature before bed leveling
-  begins. If `False` the target is set after bed level completes. Setting `True`
-  warms up the extruder faster and `False` prevents oozing during bed level.
-  The extruder preheat is applied independent of this setting.
+* `variable_start_extruder_probing_temp` *(default: 0)* - If set to a non-zero
+  value the extruder will be stabilized at the supplied temperature prior to bed
+  probing. This is useful for [Voron TAP](
+  https://github.com/VoronDesign/Voron-Tap), load cells, and other forms of
+  probing that use the nozzle directly. When this value is provided
+  `variable_start_extruder_preheat_scale` is ignored.
 
 * `variable_start_gcode_before_print` *(default: None)* - Optional user-supplied
   gcode run after any leveling operations are complete and the bed, extruder,
