@@ -223,7 +223,7 @@ gcode:
 [save_variables]
 filename: ~/printer_data/variables.cfg # UPDATE THIS FOR YOUR PATH!!!
 
-[virtual_sdcard]
+[virtual_sdcard]    # Optional, for LCD menus
 path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
 
 [display_status]
