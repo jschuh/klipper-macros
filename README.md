@@ -444,9 +444,14 @@ The following additional configuration options are available from
 
 `BED_MESH_CHECK`
 
-Checks the `[bed_mesh]` config and warns if `mesh_min` or `mesh_max` could allow
-a move out of range during `BED_MESH_CALIBRATE`. This is run implictily at
-Klipper startup and at the start of `BED_MESH_CALIBRATE`.
+* `ABORT` - Set to a non-zero value to abort macro processing on an error.
+* `MESH_MIN` - See Klipper documentation for `BED_MESH_CALIBRATE`.
+* `MESH_MAX` - See Klipper documentation for `BED_MESH_CALIBRATE`.
+
+Checks the `[bed_mesh]` config and optionally supplied parameters. Will warn
+(or optionally abort) if `mesh_min` or `mesh_max` could allow a move out of
+range during `BED_MESH_CALIBRATE`. This is run implictily at Klipper startup
+and as part of `BED_MESH_CALIBRATE_FAST`.
 
 ### Bed Surface
 
