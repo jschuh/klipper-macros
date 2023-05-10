@@ -9,6 +9,9 @@ assignees: ''
 Before making a report please ensure you've followed the troubleshooting steps at:
 https://github.com/jschuh/klipper-macros#troubleshooting
 
+You can also get general troubleshooting assistance in the Q&A Discussion tab:
+https://github.com/jschuh/klipper-macros/discussions/categories/q-a
+
 **Describe the bug**
 Please provide a clear and concise description of the issue.
 

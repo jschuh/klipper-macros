@@ -74,6 +74,9 @@ printers. However, there are also some nice extras:
 * Verify your slicer settings and review that the gcode output is correct. Pay
   particular attention the initialization portions of the gcode and the
   parameters passed to PRINT_START.
+* Look for similar issues and post troubleshooting questions in the [Github Q&A
+  Discussion](
+  https://github.com/jschuh/klipper-macros/discussions/categories/q-a).
 
 # Reporting Bugs
 
@@ -96,9 +99,8 @@ Some important things to remember when reporting bugs:
   make diagnosis nearly impossible.
 * Please don't treat bug reports as a substitute for following the installation
   and troubleshooting instructions.
-* If you file a feature request I will most likely close it (unless it's
-  something I was already planning on adding). Sorry, but I wrote these macros
-  to meet my own needs, so that's what I work on.
+* Please direct feature requests to the [Github Ideas Discussion](
+  https://github.com/jschuh/klipper-macros/discussions/categories/ideas).
 
 > **Note:** Reports that do not follow the above guidelines _**will likely be
 > closed without any other action taken.**_
@@ -449,7 +451,7 @@ Klipper startup and at the start of `BED_MESH_CALIBRATE`.
 ### Bed Surface
 
 Provides a set of macros for selecting different bed surfaces with
-correspdonding Z offset adjustments to compensate for their thickness. All
+corresponding Z offset adjustments to compensate for their thickness. All
 available surfaces must be listed in the `variable_bed_surfaces` array.
 Corresponding LCD menus for sheet selection and babystepping will be added to
 *Setup* and *Tune* if [`lcd_menus.cfg`](#lcd-menus) is included. Any Z offset
