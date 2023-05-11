@@ -421,9 +421,11 @@ are listed in [globals.cfg](globals.cfg#L5).
 `BED_MESH_CALIBRATE_FAST`
 
 Wraps the Klipper `BED_MESH_CALIBRATE` command to scale and redistribute the
-probe points so that only the appropriate area in `MESH_MIN` and `MESH_MAX` is probed. This can dramatically reduce probing times for anything that doesn't
-fill the first layer of the bed. `PRINT_START` will automatically use this for
-bed mesh calibration if a `[bed_mesh]` section is detected in your config.
+probe points so that only the appropriate area in `MESH_MIN` and `MESH_MAX` is
+probed. This can dramatically reduce probing times for anything that doesn't
+fill the first layer of the bed. If the `MESH_MIN` and `MESH_MAX` arguments
+are provided to `PRINT_START` it will automatically use this for bed mesh
+calibration (so long as a `[bed_mesh]` section is detected in your config).
 
 The following additional configuration options are available from
 [globals.cfg](globals.cfg#L5).
@@ -437,10 +439,14 @@ The following additional configuration options are available from
 
 > **Note:** See the [optional section](#bed-mesh) for additional macros.
 
-> **Note:** The bed mesh optimizations are silently disabled for delta printers
-  and when the mesh parameters include a [`RELATIVE_REFERENCE_INDEX`
-  ](https://www.klipper3d.org/Bed_Mesh.html#the-relative-reference-index)
-  (which is icnompatible with dynamic mesh generation).
+> **Note:** The bed mesh optimizations are silently disabled for delta printers.
+
+> **Note:** If the `bed_mesh` config includes a [`relative_reference_index`
+  ](https://www.klipper3d.org/Bed_Mesh.html#the-relative-reference-index) then
+  the index point selected in the optimized mesh will be the point closest to
+  the index point in the mesh from the config. However, if a
+  `RELATIVE_REFERENCE_INDEX` parameter is supplied directly to this macro it
+  will be used unmodified.
 
 `BED_MESH_CHECK`
 
