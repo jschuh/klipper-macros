@@ -954,10 +954,10 @@ related commands, such as accelleration, jerk, and linear advance.
 
 ### Bed Mesh
 
-`BED_MESH_CALIBRATE` and `G20`
+`BED_MESH_CALIBRATE` and `G29`
 
 Overrides the default `BED_MESH_CALIBRATE` to use `BED_MESH_CALIBRATE_FAST`
-instead, and adds the `G20` command.
+instead, and adds the `G29` command.
 
 ***Configuration:***
 
