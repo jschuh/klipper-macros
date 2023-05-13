@@ -470,6 +470,39 @@ Corresponding LCD menus for sheet selection and babystepping will be added to
 adjustments made in the LCD menus, console, or other clients (e.g. Mainsail,
 Fluidd) will be applied to the current sheet and persisted across restarts.
 
+#### `ADJUST_SURFACE_OFFSETS`
+
+Adjusts surface offsets to account for changes in the Z endstop position or
+probe Z offset. A message to invoke this command will be shown in the console
+when a relevant change is made to `printer.cfg`.
+
+* `IGNORE` - Set to 1 to reset the saved offsets without adjusting the surfaces.
+
+#### `LOAD_SURFACE_MESH`
+
+Attempts to load a mesh associated with the specified surface.
+
+* `SURFACE` *(default: current surface)* - Bed surface.
+
+#### `MAKE_SURFACE_MESH`
+
+Generates a mesh associated with the specified surface. If
+`variable_start_try_saved_surface_mesh` is true then `START_PRINT` will load
+this mesh when the surface is selected (and skip the mesh leveling step if it
+was specified).
+
+* `BED` - *(default: 70)* Bed temperature when probing the bed.
+* `EXTRUDER` - *(default: `variable_start_extruder_probing_temp`)* Extruder
+  temperature when probing the bed.
+* `SURFACE` *(default: current surface)* - Bed surface.
+* `MESH_MULTIPLIER` *(default: 2)* - Increases the mesh density by the specified
+  integer value while preserving the existing mesh points and relative reference
+  index. A value of `1` leaves the mesh unmodified, `2` doubles the density, `3`
+  triples it, etc. (I.e. if `bed_mesh` specifies `probe_count: 5,5` and
+  `MESH_MULTIPLIER=2` then this macro will generate a 9x9 grid, whereas
+  `MESH_MULTIPLIER=3` will generate a 13x13 grid.)
+* *See Klipper `BED_MESH_CALIBRATE` documentation for additional arguments.*
+
 #### `SET_SURFACE_ACTIVE`
 
 Sets the provided surface active (from one listed in listed in
@@ -491,14 +524,6 @@ argument for `OFFSET` is provided the current offset is displayed.
 > **Note:** The `SET_GCODE_OFFSET` macro is overridden to update the
 > offset for the active surface. This makes the bed surface work with Z offset
 > adjustments made via any interface or client.
-
-#### `ADJUST_SURFACE_OFFSETS`
-
-Adjusts surface offsets to account for changes in the Z endstop position or
-probe Z offset. A message to invoke this command will be shown in the console
-when a relevant change is made to `printer.cfg`.
-
-* `IGNORE` - Set to 1 to reset the saved offsets without adjusting the surfaces.
 
 ### Beep
 
@@ -901,6 +926,12 @@ These are the customization options you can add to your
 * `variable_start_quad_gantry_level_at_temp` *(default: True if
   `quad_gantry_level` configured)* - If true the `PRINT_START` macro will run
   `QUAD_GANTRY_LEVEL` after the bed has stabilized at its target temperature.
+
+* `variable_start_try_saved_surface_mesh` *(default: False)* If enabled and
+  `bed_mesh.profiles` contains a matching mesh for the currently select bed
+  surface, then the mesh will be loaded from the saved profile (and
+  [`BED_MESH_CALIBRATE_FAST`](#bed-mesh-improvements) will be skipped if
+  it would have been run otherwise).
 
 * `variable_start_z_tilt_adjust_at_temp`  *(default: True if `z_tilt`
   configured)* - If true the `PRINT_START` macro will run `Z_TILT_ADJUST` after
