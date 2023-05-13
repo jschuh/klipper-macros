@@ -90,8 +90,9 @@ them useful for handling bug reports.
 Some important things to remember when reporting bugs:
 
 * **Paste the full text of the command that triggered the error, along with any
-  error messages printed to the console** (and relevant sections of the klipper
-  logs if appropriate).
+  error messages printed to the console** and relevant sections of the klipper
+  logs if appropriate (and please [format this text as code](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#quoting-code),
+  otherwise Github will format it like a ransom note).
 * **Attach your config to the bug report.** There's generally no way to diagnose
   anything without the configs.
 * **Verify that your issue reproduces on the current, stock installation of
@@ -242,8 +243,8 @@ into the relevant sections.
 #### Start G-code
 
 ```
-M190 S0
-M109 S0
+M190 S0 ; Not needed in Prusa Slicer 2.6 and later
+M109 S0 ; Not needed in Prusa Slicer 2.6 and later
 PRINT_START EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count} NOZZLE_SIZE={nozzle_diameter[0]}
 
 ; This is the place to put slicer purge lines if you haven't set a non-zero
@@ -367,7 +368,7 @@ managed_services: klipper
 
 > **Note:** I'd advise against adding the auto-update entries to Moonraker until
 > you have everything working well, because it can make uninstallation a bit
-> harder due to how Moonraker's autoupdate behavior.
+> harder due to Moonraker's autoupdate behavior.
 
 ## Removal
 
@@ -954,10 +955,10 @@ related commands, such as accelleration, jerk, and linear advance.
 
 ### Bed Mesh
 
-`BED_MESH_CALIBRATE` and `G20`
+`BED_MESH_CALIBRATE` and `G29`
 
 Overrides the default `BED_MESH_CALIBRATE` to use `BED_MESH_CALIBRATE_FAST`
-instead, and adds the `G20` command.
+instead, and adds the `G29` command.
 
 ***Configuration:***
 
