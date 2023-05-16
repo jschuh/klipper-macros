@@ -243,13 +243,22 @@ into the relevant sections.
 #### Start G-code
 
 ```
-M190 S0 ; Not needed in Prusa Slicer 2.6 and later
-M109 S0 ; Not needed in Prusa Slicer 2.6 and later
-PRINT_START EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count} NOZZLE_SIZE={nozzle_diameter[0]}
+M190 S0 ; Remove this if autoemit_temperature_commands is off in Prusa Slicer 2.6 and later
+M109 S0 ; Remove this if autoemit_temperature_commands is off in Prusa Slicer 2.6 and later
+_PRINT_START_PHASE_INIT EXTRUDER={first_layer_temperature[initial_tool]} BED=[first_layer_bed_temperature] MESH_MIN={first_layer_print_min[0]},{first_layer_print_min[1]} MESH_MAX={first_layer_print_max[0]},{first_layer_print_max[1]} LAYERS={total_layer_count} NOZZLE_SIZE={nozzle_diameter[0]}
+; Insert custom gcode here.
+_PRINT_START_PHASE_PREHEAT
+; Insert custom gcode here.
+_PRINT_START_PHASE_PROBING
+; Insert custom gcode here.
+_PRINT_START_PHASE_EXTRUDER
+; Insert custom gcode here.
+_PRINT_START_PHASE_PURGE
 
 ; This is the place to put slicer purge lines if you haven't set a non-zero
-; variable_start_purge_length to have START_PRINT automatically purge (e.g. if
-; using a Mosaic Palette, which requires the slicer to generate the purge).
+; variable_start_purge_length to have START_PRINT automatically calculate and 
+; perform the purge (e.g. if using a Mosaic Palette, which requires the slicer
+; to generate the purge).
 ```
 
 #### End G-code
@@ -307,11 +316,20 @@ configuration steps listed below.
 ```
 M190 S0
 M109 S0
-PRINT_START EXTRUDER={material_print_temperature_layer_0} BED={material_bed_temperature_layer_0} NOZZLE_SIZE={machine_nozzle_size}
+_PRINT_START_PHASE_INIT EXTRUDER={material_print_temperature_layer_0} BED={material_bed_temperature_layer_0} NOZZLE_SIZE={machine_nozzle_size}
+; Insert custom gcode here.
+_PRINT_START_PHASE_PREHEAT
+; Insert custom gcode here.
+_PRINT_START_PHASE_PROBING
+; Insert custom gcode here.
+_PRINT_START_PHASE_EXTRUDER
+; Insert custom gcode here.
+_PRINT_START_PHASE_PURGE
 
 ; This is the place to put slicer purge lines if you haven't set a non-zero
-; variable_start_purge_length to have START_PRINT automatically purge (e.g. if
-; using a Mosaic Palette, which requires the slicer to generate the purge).
+; variable_start_purge_length to have START_PRINT automatically calculate and 
+; perform the purge (e.g. if using a Mosaic Palette, which requires the slicer
+; to generate the purge).
 ```
 
 #### End G-code
@@ -891,14 +909,6 @@ These are the customization options you can add to your
   probing that use the nozzle directly. When this value is provided
   `variable_start_extruder_preheat_scale` is ignored.
 
-* `variable_start_gcode_before_print` *(default: None)* - Optional user-supplied
-  gcode run after any leveling operations are complete and the bed, extruder,
-  and chamber are all stabilized at their target temperatures. Immediately after
-  this gcode executes the purge line will be printed (if specified) and then the
-  file from the virtual sdcard will begin printing. This is a useful to add any
-  probe docking commands, loading from a multi-material unit, or other
-  operations that must occur before any filament is extruded.
-
 * `variable_start_level_bed_at_temp` *(default: True if `bed_mesh` configured
   )* - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
   #bed-mesh-improvements) after the bed has stabilized at its target
@@ -959,6 +969,23 @@ gcode:
   account for customizations specific to your printer. E.g. If you have a
   dockable probe you may choose to wrap `BED_MESH_CALIBRATE` with the
   appropriate docking/undocking commands.
+
+#### `PRINT_START` Phases
+
+The recommended slicer start gcode breaks `PRINT_START` into the phases below.
+This approach allows for pausing or cancelling, and inserting custom gcode
+between the phases (e.g. to set status LEDs, deploy/dock probes, load filament).
+The phases are described in order below:
+
+* `_PRINT_START_PHASE_INIT` - Initializes the `PRINT_START` settings, and begins
+  heating the bed and chamber.
+* `_PRINT_START_PHASE_PREHEAT` - Stabilizes the bed and (if applicable) chamber
+  at the target temperatures. Also homes the axes while heating is in progress.
+* `_PRINT_START_PHASE_PROBING` - Performs probing operations, including mesh
+  bed calibration, quad gantry leveling, etc.
+* `_PRINT_START_PHASE_EXTRUDER` - Stabilizes the extruder at the target
+  temperature.
+* `_PRINT_START_PHASE_PURGE` - Extrudes a purge line in front of the print area.
 
 #### `PRINT_END`
 
