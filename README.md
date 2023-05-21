@@ -636,6 +636,32 @@ Sets scaling parameters for the extruder fan.
 
 * Clears all existing fan scaling factors.
 
+### Extra Fans
+
+Implements the M106/M107 command in Marlin way for controlling extra fans (if a corresponding `[fan_generic aux_fan]` or `[fan_generic chamber_fan]`section is
+present). Used by default in Orcaslicer.
+
+#### `M106`
+
+Adjust fan speed.
+
+* `P` *(optional)* - Fan target
+  * `P=1` - Part Fan
+  * `P=2` - Aux Fan (if `[fan_generic aux_fan]` is present)
+  * `P=3` - Chamber Fan (if `[fan_generic chamber_fan]` is present)
+  > **Note:** if not provided Part Fan will be the target
+* `S` - Speed, from 0 to 255. S255 provides 100% duty cycle; S128 produces 50%.
+
+#### `M107`
+
+Turn off the fan.
+
+* `P` *(optional)* - Fan target
+  * `P=1` - Part Fan
+  * `P=2` - Aux Fan (if `[fan_generic aux_fan]` is present)
+  * `P=3` - Chamber Fan (if `[fan_generic chamber_fan]` is present)
+  > **Note:** if not provided Part Fan will be the target
+
 ### Filament
 
 #### `LOAD_FILAMENT` / `UNLOAD_FILAMENT`
