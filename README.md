@@ -1020,6 +1020,79 @@ Parks the printhead, shuts down heaters, fans, etc, and performs general state
 housekeeping at the end of the print (called from the slicer's print end
 g-code).
 
+### Print Status Events
+
+> **Note:** This is a brand new feature that will likely evolve in the near
+> future. Statuses will probably be added and/or removed as I get a better sense
+> of how they're being used. _**Keep that in mind as you integrate this into
+> your own setup.**_
+
+The following events are fired during during the printing process, and the
+`GCODE_ON_PRINT_STATUS` command associates custom gcode with these events. This
+custom gcode can be used to set LEDs, emit beeps, or perform any other
+operations you may want to run at a given status in the printing process.
+
+* `ready` - Printer is ready to receive a job
+* `filament_load` - Loading filament
+* `filament_unload` - Unloading filament
+* `bed_heating` - Waiting for the bed to reach target
+* `chamber_heating` - Waiting for the chamber to reach target
+* `homing` - Homing any axis
+* `leveling_gantry` - Performing quad gantry-leveling
+* `calibrating_z` - Performing z-tilt adjustment
+* `meshing` - Calibrating a bed mesh
+* `extruder_heating` - Waiting for the extruder to reach target
+* `purging` - Printing purge line
+* `printing` - Actively printing
+* `pausing` - Print is paused
+* `cancelling` - Print is being cancelled
+* `completing` - Print completing (does not fire on a cancelled print)
+
+#### `GCODE_ON_PRINT_STATUS`
+
+Associates a gcode command with a specific status and sets the parameters for
+when and how the status event fires.
+
+* `STATUS` - The status event this command is associated with.
+* `COMMAND` - The text of the command.
+* `ARGS` *(default: `0`)* - Set to `1` to enable passing the following status
+  arguments to the macro: `TYPE`, `WHEN`, `LAST_STATUS`, and `NEXT_STATUS`.
+  This is useful if calling a custom macro that determines its behavior based
+  on the exact details of the state transition.
+* `FILTER_ENTER` - An optional list of statuses that, if provided, will prevent
+  the command from firing unless the last status matches a status in the list.
+* `FILTER_LEAVE` - An optional list of statuses that, if provided, will prevent
+  the command from firing unless the next status matches a status in the list.
+* `TYPE` *(default: `ENTER`)* - If set to `ENTER` the command is run when
+  entering the specified status. If set to `LEAVE` the command is run when
+  leaving the specified status. If set to `BOTH` the command is run when
+  entering and leaving. The `LEAVE` commands are processed first, followed by
+  the `ENTER` commands, all in the order they were originally set.
+* `WHEN` *(default: `PRINTING`)* - Set to `PRINTING` to fire the status event
+  only when printing, `IDLE` when not printing, and `ALWAYS` for both.
+
+#### Print Status Event Example
+
+Below is a simple example of how to set up a status event config. The calls to
+`GCODE_ON_PRINT_STATUS` are placed in the `gcode` of the
+`[gcode_macro _km_options]` config section, so that they will be run once at
+printer start. When the printer enters the `ready` state at startup the command
+will echo *` TYPE=LEAVE WHEN=IDLE LAST_STATUS=none NEXT_STATUS=ready`* to the
+console, and when it leaves the `ready` state to begin printing it will echo
+*`TYPE=ENTER WHEN=PRINTING LAST_STATUS=ready NEXT_STATUS=homing`*.
+
+```
+[gcode_macro _km_options]
+# Any options variables declared here
+gcode:
+  GCODE_ON_PRINT_STATUS STATUS=ready COMMAND="STATUS_TEST" ARGS=1 WHEN=ALWAYS TYPE=BOTH
+
+[gcode_macro status_test]
+variable_extruder: 0
+gcode:
+  M118 STATUS_TEST {rawparams}
+```
+
 ### Velocity
 
 These are some basic wrappers for Klipper's analogs to some of Marlin's velocity
