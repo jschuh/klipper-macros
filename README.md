@@ -228,6 +228,7 @@ filename: ~/printer_data/variables.cfg # UPDATE THIS FOR YOUR PATH!!!
 
 [virtual_sdcard]
 path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
+on_error_gcode: CANCEL_PRINT
 
 [display_status]
 ```
