@@ -228,6 +228,7 @@ filename: ~/printer_data/variables.cfg # UPDATE THIS FOR YOUR PATH!!!
 
 [virtual_sdcard]
 path: ~/gcode_files # UPDATE THIS FOR YOUR PATH!!!
+on_error_gcode: CANCEL_PRINT
 
 [display_status]
 ```
@@ -259,6 +260,17 @@ _PRINT_START_PHASE_PURGE
 ; variable_start_purge_length to have START_PRINT automatically calculate and 
 ; perform the purge (e.g. if using a Mosaic Palette, which requires the slicer
 ; to generate the purge).
+```
+
+#### Additional SuperSlicer Start G-code
+
+If you're using SuperSlicer you can add the following immediately before the
+`PRINT_START` line from above. This will perform some added bounds checking and
+will allow you to use the random print relocation feature without requiring
+`exclude_object` entries in the print file.
+
+```
+PRINT_START_SET MODEL_MIN={bounding_box[0]},{bounding_box[1]} MODEL_MAX={bounding_box[3]},{bounding_box[4]}
 ```
 
 #### End G-code
@@ -948,7 +960,7 @@ These are the customization options you can add to your
   adjustments after the print completes or is cancelled (e.g. feedrate,
   flow percentage).
 
-* `variable_start_purge_clearance` *(default: 5.0)* Distance (in millimeters)
+* `variable_start_purge_clearance` *(default: 5.0)* - Distance (in millimeters)
   between the purge lines and the print area (if a `start_purge_length` is
   provided).
 
@@ -956,14 +968,29 @@ These are the customization options you can add to your
   millimeters) to purge after the extruder finishes heating and prior to
   starting the print. For most setups `30` is a good starting point.
 
-* `variable_start_purge_prime_length` *(default: 10.0)* Length of filament (in
+* `variable_start_purge_prime_length` *(default: 10.0)* - Length of filament (in
   millimeters) to prime the extruder before drawing the purge lines.
 
 * `variable_start_quad_gantry_level_at_temp` *(default: True if
   `quad_gantry_level` configured)* - If true the `PRINT_START` macro will run
   `QUAD_GANTRY_LEVEL` after the bed has stabilized at its target temperature.
 
-* `variable_start_try_saved_surface_mesh` *(default: False)* If enabled and
+* `variable_start_random_placement_max` *(default: 0)* - A positive value
+  specifies the +/- distance in the XY axes that the print can be randomly
+  relocated (assuming the bed has sufficient space). This can help reduce bed
+  wear from repeatedly printing in the same spot. Note that this feature
+  requires additional information to determine the proper bounds of the
+  relocated print. As such, `START_PRINT` must have valid `MESH_MIN`/`MESH_MAX`
+  parameters, and either `MODEL_MIN`/`MODEL_MAX` must be set or the print file
+  must include `EXCLUDE_OBJECT_DEFINE` statements with `POLYGON` lists that
+  define the bounds of the objects ([see `exclude_object` for more information](
+  https://www.klipper3d.org/Exclude_Object.html)).
+
+* `variable_start_random_placement_padding` *(default: 10.0)* - The minimum
+  distance the relocated print will be placed from the printable edge of the
+  bed.
+
+* `variable_start_try_saved_surface_mesh` *(default: False)* - If enabled and
   `bed_mesh.profiles` contains a matching mesh for the currently select bed
   surface, then the mesh will be loaded from the saved profile (and
   [`BED_MESH_CALIBRATE_FAST`](#bed-mesh-improvements) will be skipped if
