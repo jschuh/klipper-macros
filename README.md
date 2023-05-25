@@ -746,13 +746,20 @@ when the `O` argument is included (equivalent to the same argument in Marlin).
 See Klipper `G28` documentation for general information and detail on the other
 arguments.
 
-* `O` - Omits axes from the homing procedure if they are already homed.
+* `O` - Omits already homed axes from the homing procedure.
 
 > **Note:** If you have a `[homing_override]` section you will need to update
 > any `G28` commands in the gcode part to use `G28.6245197` instead (which is
 > the renamed version of Klipper's built-in `G28`). Failure to do this will
 > cause `G28` commands to error out with the message ***Macro G28 called
 > recursively***.
+
+#### `LAZY_HOME`
+
+Homes the specified axes; by default omits any axes that are already homed.
+
+* `AXES` *(default: XYZ)* - List of axes to home.
+* `LAZY` *(default: 1)* - Omits already homed axes from the homing procedure.
 
 ### Layer Triggers
 
