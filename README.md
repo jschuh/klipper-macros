@@ -910,9 +910,11 @@ These are the customization options you can add to your
   smaller or thinner beds you may want to reduce this value or disable it
   entirely by setting it to `0.0`.
 
-* `variable_start_end_park_y` *(default: `print_max` Y coordinate)* - The final
-  Y position of the toolhead in the `PRINT_END` macro, to ensure that the
-  toolhead is out of the way when the bed is presented for print removal.
+* `variable_start_end_park_y` *(default: `max`)* - The final Y position of the
+  toolhead in the `PRINT_END` macro, to ensure that the toolhead is out of the
+  way when the bed is presented for print removal. This can be set to a Y
+  coordinate (e.g. `0.0`), `max` to use `stepper_y.position_max`, or `min` to
+  use `stepper_y.position_min`.
 
 * `variable_start_extruder_preheat_scale` *(default: 0.5)* - This value is
   multiplied by the target extruder temperature and the result is used as the
