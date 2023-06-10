@@ -1062,7 +1062,8 @@ operations you may want to run at a given status in the printing process.
 Associates a gcode command with a specific status and sets the parameters for
 when and how the status event fires.
 
-* `STATUS` - The status event this command is associated with.
+* `STATUS` - A comma seperated list of status events this command is associated
+  with. Passing the value `all` will associate the gcode with all statuses.
 * `COMMAND` - The text of the command.
 * `ARGS` *(default: `0`)* - Set to `1` to enable passing the following status
   arguments to the macro: `TYPE`, `WHEN`, `LAST_STATUS`, and `NEXT_STATUS`.
