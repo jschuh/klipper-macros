@@ -557,15 +557,15 @@ argument for `OFFSET` is provided the current offset is displayed.
 
 ### Beep
 
-Implements the M300 command (if a corresponding `[output_pin beeper]` section is
+Implements a BEEP command (if a corresponding `[output_pin beeper]` section is
 present). This command causes the speaker to emit an audible tone.
 
-#### `M300`
+#### `BEEP`
 
 Emits an audible tone.
 
-* `P` *(default: `100`)* - Duration of tone (in milliseconds).
-* `S` *(default: `1000`)* - Frequency of tone.
+* `DURATION` *(default: `100`)* - Duration of tone (in milliseconds).
+* `FREQUENCY` *(default: `1000`)* - Frequency of tone.
 
 ### Draw
 
@@ -853,7 +853,7 @@ Pauses the current print.
 * `Y` *(default: `variable_park_y`)* - Absolute Y parking coordinate.
 * `Z` *(default: `variable_park_z`)* - Relative Z parking coordinate
 * `E` *(default: `5`)* - Retraction length to prevent ooze.
-* `B` *(default: `10`)* - Number of beeps to emit (if `M300` is enabled).
+* `B` *(default: `10`)* - Number of beeps to emit (if `BEEP` is enabled).
 
 #### `RESUME`
 
@@ -1169,3 +1169,18 @@ information on how to configure specific behaviors.
 ```
 
 ***Requirements:** A properly configured `display` section.*
+
+### `M300`
+
+Implements the M300 command, which causes the speaker to emit an audible tone.
+
+* `P` *(default: `100`)* - Duration of tone (in milliseconds).
+* `S` *(default: `1000`)* - Frequency of tone.
+
+***Configuration:***
+
+```
+[include klipper-macros/optional/m300.cfg]
+```
+
+***Requirements:** A properly configured `[output_pin beeper]` section.*
