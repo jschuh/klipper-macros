@@ -1111,9 +1111,7 @@ related commands, such as accelleration, jerk, and linear advance.
 #### Marlin Compatibility
 
 * The `M201`, `M203`, `M204`, and `M205` commands are implemented by calling
-  Klipper's `SET_VELOCITY_LIMIT` command. For calls that set the `ACCEL`
-  parameter, the `ACCEL_TO_DECEL` parameter is also set and scaled by
-  `variable_velocity_decel_scale` *(default: `0.5`)*.
+  Klipper's `SET_VELOCITY_LIMIT` command.
 * The `M900` command is implemented by calling Klipper's `SET_PRESSURE_ADVANCE`
   command. The `K` factor is scaled by `variable_pressure_advance_scale`
   *(default: `-1.0`)*. If the scaling value is negative the `M900` command has no
