@@ -936,9 +936,11 @@ These are the customization options you can add to your
   smaller or thinner beds you may want to reduce this value or disable it
   entirely by setting it to `0.0`.
 
-* `variable_start_end_park_y` *(default: `print_max` Y coordinate)* - The final
-  Y position of the toolhead in the `PRINT_END` macro, to ensure that the
-  toolhead is out of the way when the bed is presented for print removal.
+* `variable_start_end_park_y` *(default: `max`)* - The final Y position of the
+  toolhead in the `PRINT_END` macro, to ensure that the toolhead is out of the
+  way when the bed is presented for print removal. This can be set to a Y
+  coordinate (e.g. `0.0`), `max` to use `stepper_y.position_max`, or `min` to
+  use `stepper_y.position_min`.
 
 * `variable_start_extruder_preheat_scale` *(default: 0.5)* - This value is
   multiplied by the target extruder temperature and the result is used as the
@@ -1086,7 +1088,8 @@ operations you may want to run at a given status in the printing process.
 Associates a gcode command with a specific status and sets the parameters for
 when and how the status event fires.
 
-* `STATUS` - The status event this command is associated with.
+* `STATUS` - A comma seperated list of status events this command is associated
+  with. Passing the value `all` will associate the gcode with all statuses.
 * `COMMAND` - The text of the command.
 * `ARGS` *(default: `0`)* - Set to `1` to enable passing the following status
   arguments to the macro: `TYPE`, `WHEN`, `LAST_STATUS`, and `NEXT_STATUS`.
@@ -1134,9 +1137,7 @@ related commands, such as accelleration, jerk, and linear advance.
 #### Marlin Compatibility
 
 * The `M201`, `M203`, `M204`, and `M205` commands are implemented by calling
-  Klipper's `SET_VELOCITY_LIMIT` command. For calls that set the `ACCEL`
-  parameter, the `ACCEL_TO_DECEL` parameter is also set and scaled by
-  `variable_velocity_decel_scale` *(default: `0.5`)*.
+  Klipper's `SET_VELOCITY_LIMIT` command.
 * The `M900` command is implemented by calling Klipper's `SET_PRESSURE_ADVANCE`
   command. The `K` factor is scaled by `variable_pressure_advance_scale`
   *(default: `-1.0`)*. If the scaling value is negative the `M900` command has no
