@@ -1,6 +1,31 @@
-# Klipper macro's to automatically handle the NEVERMORE & Stock Voron Exhaust FAN
-# This file is an example configfile with everything included to get started almost immediately. 
-# Read the code below through, and adjust where nessecary.
+
+# This configuration file defines settings and macros for controlling two fans (exhaust and nevermore) in a 3D printer based on various conditions.
+
+# Here's a breakdown:
+
+# Fan Definitions:
+
+# Two fans are defined: exhaust_fan and nevermore_fan.
+# Each fan has a pin, maximum power, and shutdown speed configured.
+# G-Code Macros for Fan Control:
+
+# Macros are defined for each fan to turn them off, set low speed, and set high speed.
+# Each macro uses SET_FAN_SPEED command and sends a message indicating the fan state.
+
+# Filter Handler Macro:
+# This macro checks various conditions and sets fan speeds accordingly.
+# It uses conditional statements based on:
+# Printer state (idle, ready, or printing)
+# Bed temperature
+# Extruder temperature and target temperature
+# Based on these conditions, it calls other defined macros to adjust fan speeds.
+
+# Delayed G-Code:
+# A delayed G-code named _FILTER_HANDLER_TICK is defined to run the _FILTER_HANDLER macro every 5 seconds.
+# This ensures the fan speeds are adjusted based on changing conditions regularly.
+
+# Overall, this configuration file establishes an automated system for controlling the 3D printer's fan speeds based on bed and extruder temperatures,
+# optimizing cooling based on the printer's state and printing activity (I hope)
 
 #
 #
