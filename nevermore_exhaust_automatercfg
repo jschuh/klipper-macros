@@ -1,6 +1,6 @@
 # Klipper macro's to automatically handle the NEVERMORE & Stock Voron Exhaust FAN
 # This file is an example configfile with everything included to get started almost immediately. 
-# Adjust the 'pin' s for the fan and temperature chamber sensor (optional)
+# Read the code below through, and adjust where nessecary.
 
 #
 #
