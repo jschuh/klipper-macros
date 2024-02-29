@@ -1,0 +1,145 @@
+# Klipper macro's to automatically handle the NEVERMORE & Stock Voron Exhaust FAN
+# This file is an example configfile with everything included to get started almost immediately. 
+# Adjust the 'pin' s for the fan and temperature chamber sensor (optional)
+
+#
+#
+# FANS
+#
+#
+[fan_generic exhaust_fan]
+pin: PB3
+max_power: 1.0
+shutdown_speed: 0.0
+
+[fan_generic nevermore_fan]
+pin: PA14
+max_power: 1.0
+shutdown_speed: 0.0
+
+
+#
+#
+# G-Code macro's to handle the Exhaust and nevermore fans
+#
+#
+[gcode_macro EXHAUST_OFF]
+gcode:
+  SET_FAN_SPEED FAN=exhaust_fan SPEED=0.0
+  M118 Exhaust fan is off
+
+[gcode_macro EXHAUST_LOW]
+gcode:
+  SET_FAN_SPEED FAN=exhaust_fan SPEED=0.3
+  M118 Exhaust fan set to low
+
+[gcode_macro EXHAUST_HIGH]
+gcode:
+  SET_FAN_SPEED FAN=exhaust_fan SPEED=1.0
+  M118 Exhaust fan set to high
+
+
+[gcode_macro NEVERMORE_OFF]
+gcode:
+  SET_FAN_SPEED FAN=nevermore_fan SPEED=0.0
+  M118 Nevermore fan is off
+
+[gcode_macro NEVERMORE_LOW]
+gcode:
+  SET_FAN_SPEED FAN=nevermore_fan SPEED=0.5
+  M118 Nevermore fan set to low
+
+[gcode_macro NEVERMORE_HIGH]
+gcode:
+  SET_FAN_SPEED FAN=nevermore_fan SPEED=1.0
+  M118 Nevermore fan set to high
+
+#
+#
+# Filter Handler - Make sure to make your fan speed for EXHAUST_LOW, EXHAUST_HIGH, NEVERMORE_LOW and NEVERMORE_HIGH and fan names match
+# Here is where the magic happens
+#
+#
+[gcode_macro _FILTER_HANDLER]
+gcode:
+  {% set state = printer.idle_timeout.state|default("unknown")|lower %}
+  {% set exhaust =  printer['fan_generic exhaust_fan'].speed|float %}
+  {% set nevermore = printer['fan_generic nevermore_fan'].speed|float %}
+  {% set bed_temp = printer.heater_bed.temperature|int %}
+  {% set extruder_temp = printer.extruder.temperature|int %}
+  {% set extruder_target = params.EXTRUDER|default(-1)|int %}                   # Get extruder temp from gcode file
+  {% if extruder_target == -1 %}
+    {% set extruder_target = printer.extruder.target|int %}
+  {% endif %}
+ 
+  # When idle or Ready
+  {% if state == 'idle' or state == 'ready' %}
+    
+    # Bed temp > 69
+    {% if bed_temp > 69 %}
+      # Exhaust
+      {% if exhaust < 1.0 %}
+        EXHAUST_HIGH
+      {% endif %}
+      # Nevermore
+      {% if nevermore < 1.0 %}
+        NEVERMORE_HIGH
+      {% endif %}
+    
+    # Bed temp > 54
+    {% elif bed_temp > 54 %}
+       # Exhaust
+      {% if exhaust != 0.3 %}
+        EXHAUST_LOW
+      {% endif %}
+      # Nevermore
+      {% if nevermore != 0.5 %}
+        NEVERMORE_LOW
+      {% endif %}
+
+    {% else %} # bed temp lower then 55
+      # Exhaust
+      {% if exhaust > 0.0 %}
+        EXHAUST_OFF
+      {% endif %}
+      # Nevermore
+      {% if nevermore > 0.0 %}
+        NEVERMORE_OFF
+      {% endif %}
+    {% endif %} # bed temp
+  
+  # When printing
+  {% elif state == 'printing' %}
+  
+    # Exhaust
+    {% if extruder_temp > 199 %}
+      {% if exhaust < 0.3 %}
+        EXHAUST_LOW
+      {% endif %}
+    {% endif %}
+  
+    # Nevermore
+    {% if extruder_target > 224 %}
+      {% if nevermore != 1.0 %}
+        NEVERMORE_HIGH
+      {% endif %}
+    {% elif extruder_target > 199 %}
+      {% if nevermore != 0.5 %}
+        NEVERMORE_LOW
+      {% endif %} # nevermore current speed
+    {% endif %} # extruder target temp
+  {% endif %} # state
+
+
+#
+#
+# Delayed G-Code to run the handler regulary
+#
+#
+[delayed_gcode _FILTER_HANDLER_TICK]
+initial_duration: 5
+gcode:
+  UPDATE_DELAYED_GCODE ID=_FILTER_HANDLER_TICK DURATION=5.0
+  _FILTER_HANDLER
+
+
