@@ -557,8 +557,9 @@ argument for `OFFSET` is provided the current offset is displayed.
 
 ### Beep
 
-Implements the M300 command (if a corresponding `[output_pin beeper]` section is
-present). This command causes the speaker to emit an audible tone.
+Implements the M300 command (if a corresponding `pwm_cycle_time beeper` or
+`[output_pin beeper]` section is present). This command causes the speaker to
+emit an audible tone.
 
 #### `M300`
 
