@@ -931,6 +931,12 @@ These are the customization options you can add to your
   probing that use the nozzle directly. When this value is provided
   `variable_start_extruder_preheat_scale` is ignored.
 
+* `variable_start_extruder_probing_temp_fast_forward` *(default: False)* - If set to a True
+  AND the current extruder temperature is above `start_extruder_probing_temp`,
+  the extruder will not be stabilized at the probing temperature before bed probing.
+  This is useful to skip the wait for the extruder temperature to cool down,
+  after for example, a previous print has ended/failed.
+
 * `variable_start_level_bed_at_temp` *(default: True if `bed_mesh` configured
   )* - If true the `PRINT_START` macro will run [`BED_MESH_CALIBRATE_FAST`](
   #bed-mesh-improvements) after the bed has stabilized at its target
