@@ -358,6 +358,7 @@ scripts must be run in the order listed below and be sure to copy the strings
 exactly, with no leading or trailing spaces.*
 
 ##### Search and Replace
+`Note: As of Cura 5.11.0, this first rule will have no effect`
 
 - Search: `(\n;(MIN|MAX)X:([^\n]+)\n;\2Y:([^\n]+))`
 - Replace: `\1\nPRINT_START_SET MESH_\2=\3,\4`
@@ -365,9 +366,10 @@ exactly, with no leading or trailing spaces.*
 
 ##### Search and Replace
 
-- Search: `(\n;LAYER_COUNT:([^\n]+))`
-- Replace: `\1\nINIT_LAYER_GCODE LAYERS=\2\nPRINT_START_SET LAYERS=\2`
+- Search: `((^|\n);LAYER_COUNT:([^\n]+))`
+- Replace: `\1\nINIT_LAYER_GCODE LAYERS=\3\nPRINT_START_SET LAYERS=\3`
 - Use Regular Expressions: ☑️
+- Ignore StartUp G-code: ☐ (unchecked)
 
 ##### Insert at layer change
 
@@ -376,8 +378,8 @@ exactly, with no leading or trailing spaces.*
 
 ##### Search and Replace
 
-- Search: `(\n;LAYER:([^\n]+))`
-- Replace: `\1\nBEFORE_LAYER_CHANGE LAYER=\2\nAFTER_LAYER_CHANGE`
+- Search: `((^|\n);LAYER:([^\n]+))`
+- Replace: `\1\nBEFORE_LAYER_CHANGE LAYER=\3\nAFTER_LAYER_CHANGE`
 - Use Regular Expressions: ☑️
 
 ## Moonraker Configuration
